@@ -4,7 +4,7 @@ import colors from "../../colors/color";
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: colors.color6
+        backgroundColor: colors.color6,
     }, 
     box1: {
         height: 430,
@@ -46,35 +46,42 @@ const styles = StyleSheet.create({
         fontSize: 24
     },
     infoContainer: {
-        paddingHorizontal: 14,
+        width: '92%',
         paddingBottom: 20,
+        alignSelf: 'center'
     },
     textBold: {
         fontWeight: 'bold',
         fontSize: 15
     },
-    btnContainer: {
+    btnEditProfile: {
         height: 35,
-        backgroundColor: colors.color4,
+        backgroundColor: colors.color10,
         flexDirection: 'row',
-        alignSelf: 'baseline',
+        alignSelf: 'center',
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 6,
         paddingHorizontal: 20,
         paddingVertical: 6,
-        marginStart: 13
+        width: '92%',
     },
     text2: {
         fontSize: 14,
-        color: colors.white,
+        color: colors.black,
         fontWeight: 'bold',
         marginStart: 5
     },
     box2: {
+        width: '100%',
         marginTop: 10,
-        height: 500,
-        backgroundColor: 'white'
+        alignSelf: 'baseline',
+        backgroundColor: 'white',
+        paddingHorizontal: '4%',
+        paddingBottom: 10
+    },
+    box3: {
+        marginTop: 10
     }
 })
 

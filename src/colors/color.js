@@ -9,9 +9,9 @@ const colors = {
     color5: '#5a5a5a',
     color6: '#e0e3e7',
     color7: '#636363',
-    color8: '#e1fffe',
-    color8: '#349991',
-    color9: '#05c662'
+    color8: '#dbf8ffff',
+    color9: '#05c662',
+    color10: '#dbd8d8'
 }
 
 export default colors;
