@@ -8,7 +8,7 @@ import Posts from '../../components/posts/Posts'
 
 const ProfileScreen = () => {
 
-  const data = [1,2,3,4,5];
+  const data = [1, 2, 3, 4, 5];
 
   return (
     <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
@@ -45,11 +45,10 @@ const ProfileScreen = () => {
         </TouchableOpacity>
       </View>
       <View style={styles.box3}>
-        <Text style={[styles.text1, { fontSize: 18, marginBottom: 5 ,paddingHorizontal: '4%'}]}>Danh sách bài viết</Text>
-        <FlatList showsVerticalScrollIndicator={false} style={{backgroundColor: colors.color6,paddingBottom: 20}}
-          data={data}
-          renderItem ={()=> <Posts/>}
-        />
+        <Text style={[styles.text1, { fontSize: 18, marginBottom: 5, paddingHorizontal: '4%' }]}>Danh sách bài viết</Text>
+        {
+          data.map((item, index) => <Posts key={index} />)
+        }
       </View>
     </ScrollView>
   )
