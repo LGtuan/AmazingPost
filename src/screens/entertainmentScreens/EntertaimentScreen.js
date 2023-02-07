@@ -3,10 +3,14 @@ import React, { useState } from 'react'
 import { Video } from 'expo-av';
 import colors from '../../colors/color';
 import { Dimensions } from 'react-native';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
+
+const ScreenWidth = Dimensions.get("window").width;
+const ScreenHeight = Dimensions.get("window").height;
 
 const EntertaimentScreen = () => {
   const [activeIndex, setActiveIndex] = useState(0);
-  const [isPlaying,setPlay] = useState(true)
+  const [isPlaying, setPlay] = useState(true)
 
   const videos = [
     {
@@ -42,14 +46,14 @@ const EntertaimentScreen = () => {
         <FlatList
           data={videos}
           keyExtractor={(item) => { return item.source }}
-          renderItem={({ item, index }) => videoInterface(item.content, item.source, index, index === activeIndex, isPlaying,setPlay)}
+          renderItem={({ item, index }) => videoInterface(item.content, item.source, index, index === activeIndex, isPlaying, setPlay)}
           showsVerticalScrollIndicator={false}
           snapToAlignment={'start'}
           decelerationRate={'fast'}
-          snapToInterval={Dimensions.get('window').height - 147}
+          snapToInterval={ScreenHeight - 147}
           onScroll={e => {
-            const index = Math.round(e.nativeEvent.contentOffset.y / (Dimensions.get('window').height - 147));
-            if(index != activeIndex){
+            const index = Math.round(e.nativeEvent.contentOffset.y / (ScreenHeight - 147));
+            if (index != activeIndex) {
               setActiveIndex(index);
               setPlay(true);
             }
@@ -60,17 +64,20 @@ const EntertaimentScreen = () => {
   )
 }
 
-function videoInterface(content, source, index, isActive, isPlaying,setPlay) {
+function videoInterface(content, source, index, isActive, isPlaying, setPlay) {
   return (
     <View key={index} style={styles.videoWrapper}>
-      <TouchableWithoutFeedback onPress={()=>{setPlay(!isPlaying)}}>
-        <Video
-          style={styles.video}
-          source={{ uri: source }}
-          resizeMode="cover"
-          isLooping
-          shouldPlay={isActive && isPlaying}
-        />
+      <TouchableWithoutFeedback onPress={() => { setPlay(!isPlaying) }}>
+        <View>
+          <Video
+            style={styles.video}
+            source={{ uri: source }}
+            resizeMode="cover"
+            isLooping
+            shouldPlay={isActive && isPlaying}
+          />
+          <MaterialIcons name='play-arrow' size={isPlaying && isActive ? 0 : 150} color='gray' style={{ position: 'absolute', left: (ScreenWidth - 150) / 2, top: (ScreenHeight - 300) / 2 }} />
+        </View>
       </TouchableWithoutFeedback>
       <Text
         ellipsizeMode='tail'

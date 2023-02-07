@@ -13,7 +13,7 @@ const HomeScreen = ({ stackNavigation }) => {
   const arr = [1, 2, 3, 4, 5];
 
   const createPosts = () => {
-    stackNavigation.navigate('CreatePostsScreen');
+    stackNavigation.navigate('CreatePost');
   }
 
   return (

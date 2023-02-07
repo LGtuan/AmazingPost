@@ -1,34 +1,37 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StatusBar } from "expo-status-bar";
+import { StyleSheet, Text, View } from "react-native";
 
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import ContainerScreen from "./src/screens/containerScreen/ContainerScreen";
+import SplashScreen from "./src/screens/splashScreens/SplashScreen";
 
-import FormScreen from './src/screens/formScreens/FormScreen';
-import SplashScreen from './src/screens/splashScreens/SplashScreen';
-
-import { useState } from 'react';
+import { useState } from "react";
+import { useFonts } from "expo-font";
 
 export default function App() {
-  const [isLoading, setIsLoading] = useState(true);
+  const [fontsLoaded] = useFonts({
+    AndikaNewBasic: require("./assets/fonts/AndikaNewBasic.ttf"),
+    "Rubik-Light": require("./assets/fonts/Rubik-Light.ttf"),
+    "Roboto-Regular": require("./assets/fonts/Roboto-Regular.ttf"),
+  });
 
-  setTimeout(() => {
-    setIsLoading(false);
-    clearTimeout(this);
-  }, 3000);
-
-  if (isLoading) {
-    return (
-      <SplashScreen />
-    )
+  if (!fontsLoaded) {
+    return null;
   }
-  return (
-    <FormScreen />
-  );
+  // const [isLoading, setIsLoading] = useState(true);
+
+  // setTimeout(() => {
+  //   setIsLoading(false);
+  //   clearTimeout(this);
+  // }, 3000);
+
+  // if (isLoading) {
+  //   return (
+  //     <SplashScreen />
+  //   )
+  // }
+  return <ContainerScreen />;
 }
 
 const styles = StyleSheet.create({
-  container: {
-
-  },
+  container: {},
 });

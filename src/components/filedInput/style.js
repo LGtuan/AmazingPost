@@ -15,7 +15,10 @@ const styles = StyleSheet.create({
         backgroundColor: '#F8FBFF',
         borderWidth: 2,
         paddingHorizontal: 34,
+        paddingBottom: 3,
         borderColor: '#2E3154',
+        fontSize: 16,
+        fontFamily: 'AndikaNewBasic'
     },
     icon: {
         position: 'absolute',
