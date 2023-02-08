@@ -13,7 +13,7 @@ import colors from "../colors/color";
 import PeopleLine from "../components/PeopleLine";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const SearchScreen = ({ navigation,route }) => {
+const SearchScreen = ({ navigation, route }) => {
   const userId = route.params.userId;
   const [text, setText] = useState("");
   const [data, setData] = useState([]);
@@ -22,8 +22,12 @@ const SearchScreen = ({ navigation,route }) => {
     getData();
   }, []);
 
+  const showListSearch = () => {
+    navigation.navigate("ListPeople");
+  }
+
   const getData = async () => {
-    const arr = JSON.parse(await AsyncStorage.getItem("searchData"+userId));
+    const arr = JSON.parse(await AsyncStorage.getItem("searchData" + userId));
     if (arr !== null) {
       setData(arr);
     }
@@ -32,18 +36,18 @@ const SearchScreen = ({ navigation,route }) => {
   const search = async () => {
     if (text !== "") {
       const arr = [...data, text];
-      await AsyncStorage.setItem("searchData"+userId, JSON.stringify(arr));
+      await AsyncStorage.setItem("searchData" + userId, JSON.stringify(arr));
       setData(arr);
       setText("");
     }
   };
 
-  const remove = async(index)=> {
+  const remove = async (index) => {
     const arr = data;
-    arr.splice(index,1);
-    await AsyncStorage.setItem("searchData"+userId, JSON.stringify(arr));
+    arr.splice(index, 1);
+    await AsyncStorage.setItem("searchData" + userId, JSON.stringify(arr));
     getData();
-  }
+  };
 
   const backAction = () => {
     navigation.goBack();
@@ -51,12 +55,17 @@ const SearchScreen = ({ navigation,route }) => {
 
   const historyComponent = (index, text) => {
     return (
-      <View style={{ flexDirection: "row", alignItems: "center" }}>
-        <PeopleLine source={require("../images/history.png")} text={text} />
-        <TouchableOpacity activeOpacity={0.7} onPress={()=>{remove(index)}}>
-          <MaterialIcons name="clear" size={30} color={colors.color7} />
-        </TouchableOpacity>
-      </View>
+        <View style={{ flexDirection: "row", alignItems: "center" }}>
+          <PeopleLine onPress={showListSearch} source={require("../images/history.png")} text={text} />
+          <TouchableOpacity
+            activeOpacity={0.7}
+            onPress={() => {
+              remove(index);
+            }}
+          >
+            <MaterialIcons name="clear" size={30} color={colors.color7} />
+          </TouchableOpacity>
+        </View>
     );
   };
 

@@ -1,16 +1,16 @@
-import { View, Text, StyleSheet, Image } from "react-native";
+import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 import React from "react";
 import colors from "../colors/color";
 
-const PeopleLine = ({ source, text }) => {
+const PeopleLine = ({ source, text, onPress }) => {
   return (
-    <View style={styles.container}>
+    <TouchableOpacity onPress={onPress} activeOpacity={0.7} style={styles.container}>
       <Image
         source={source}
         style={styles.imgHeader}
       />
       <Text style={styles.text1}>{text}</Text>
-    </View>
+    </TouchableOpacity>
   );
 };
 

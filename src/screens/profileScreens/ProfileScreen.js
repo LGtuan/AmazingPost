@@ -34,7 +34,7 @@ const ProfileScreen = ({ stackNavigation, userId }) => {
   };
 
   const showEditProfileScreen = () => {
-    stackNavigation.navigate("EditProfile",{showEditProfileDetails: showEditProfileDetails});
+    stackNavigation.navigate("EditProfile",{userId: userId});
   };
 
   const showEditProfileDetails = () => {

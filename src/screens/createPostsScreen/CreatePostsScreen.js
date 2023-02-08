@@ -6,7 +6,7 @@ import colors from '../../colors/color';
 import { StatusBar } from 'expo-status-bar';
 
 const CreatePostsScreen = ({ navigation }) => {
-
+  
   const backAction = () => {
     navigation.goBack();
     return true;
