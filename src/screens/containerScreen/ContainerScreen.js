@@ -13,6 +13,7 @@ import CreatePostsScreen from '../createPostsScreen/CreatePostsScreen'
 import IntroduceScreen from '../introduceScreen/IntroduceScreen'
 import EditProfileScreen from '../EditProfileScreen'
 import EditProfileDetails from '../EditProfileDetails'
+import SearchScreen from '../SearchScreen'
 
 const Stack = createNativeStackNavigator();
 
@@ -27,8 +28,9 @@ const FormScreen = () => {
                     <Stack.Screen name='SignUp' component={SignUpScreen}  options={{headerShown: false}}/>
                     <Stack.Screen name='Main' component={MainScreen} options={{headerShown: false}}/>
                     <Stack.Screen name='CreatePost' component={CreatePostsScreen} options={{headerShown: false}}/>
-                    <Stack.Screen name='EditProfile' component={EditProfileScreen}/>
-                    <Stack.Screen name='EditProfileDetails' component={EditProfileDetails}/>
+                    <Stack.Screen name='EditProfile' options={{title: 'Edit profile'}} component={EditProfileScreen}/>
+                    <Stack.Screen name='EditProfileDetails' options={{title: 'Profile details'}} component={EditProfileDetails}/>
+                    <Stack.Screen name='Search' component={SearchScreen} options={{headerShown: false}}/>
                 </Stack.Navigator>
             </View>
         </NavigationContainer>

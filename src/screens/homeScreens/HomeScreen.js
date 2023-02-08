@@ -9,11 +9,15 @@ import Posts from '../../components/posts/Posts';
 import colors from '../../colors/color';
 import IconText from '../../components/iconText/IconText';
 
-const HomeScreen = ({ stackNavigation }) => {
+const HomeScreen = ({ stackNavigation,userId }) => {
   const arr = [1, 2, 3, 4, 5];
 
   const createPosts = () => {
     stackNavigation.navigate('CreatePost');
+  }
+
+  const search = () => {
+    stackNavigation.navigate('Search',{userId: userId});
   }
 
   return (
@@ -23,7 +27,7 @@ const HomeScreen = ({ stackNavigation }) => {
           <View style={styles.header1}>
             <Text style={styles.title}>Amazing Posts</Text>
             <View style={styles.menu}>
-              <TouchableOpacity activeOpacity={0.4} style={styles.searchBtn}>
+              <TouchableOpacity onPress={search} activeOpacity={0.4} style={styles.searchBtn}>
                 <Ionicons name="search" size={20} color="black" />
               </TouchableOpacity>
             </View>

@@ -69,7 +69,7 @@ const MainScreen = ({navigation,route}) => {
                     tabBarInactiveTintColor: colors.white,
                     tabBarStyle: {backgroundColor: colors.color4},
                 })}>
-                <Tab.Screen name='Home' children={()=><HomeScreen stackNavigation={navigation}/>}/>
+                <Tab.Screen name='Home' children={()=><HomeScreen stackNavigation={navigation} userId={userId}/>}/>
                 <Tab.Screen name='Entertaiment' component={EntertaimentScreen}/>
                 <Tab.Screen name='Notification' component={NotificationScreen}/>
                 <Tab.Screen name='Profile' children={()=><ProfileScreen stackNavigation={navigation} userId={userId}/>}/>
