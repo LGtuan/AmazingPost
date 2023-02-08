@@ -39,7 +39,7 @@ const SignUpScreen = ({ navigation }) => {
       setError("* Password not match");
       return false;
     }
-    user = { phone: phone, nickName: nickName, pass: pass1 };
+    user = { phone: phone, nickName: nickName, password: pass1 };
     await UserApi.addUser(user);
 
     await AsyncStorage.setItem("account",JSON.stringify({phone: phone, password: pass1, remember: true}));

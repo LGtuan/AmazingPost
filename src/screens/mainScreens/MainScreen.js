@@ -15,7 +15,10 @@ import colors from '../../colors/color';
 import CustomButton from '../../components/button/CustomButton';
 import { StatusBar } from 'expo-status-bar';
 
-const MainScreen = ({navigation}) => {
+export var userId;
+
+const MainScreen = ({navigation,route}) => {
+    userId = route.params.idUser;
 
     const backAction = () => {
         Alert.alert("Hold on!", "Are you sure you want to go back?", [
@@ -69,7 +72,7 @@ const MainScreen = ({navigation}) => {
                 <Tab.Screen name='Home' children={()=><HomeScreen stackNavigation={navigation}/>}/>
                 <Tab.Screen name='Entertaiment' component={EntertaimentScreen}/>
                 <Tab.Screen name='Notification' component={NotificationScreen}/>
-                <Tab.Screen name='Profile' component={ProfileScreen}/>
+                <Tab.Screen name='Profile' children={()=><ProfileScreen stackNavigation={navigation} userId={userId}/>}/>
             </Tab.Navigator>
         </NavigationContainer>
 
