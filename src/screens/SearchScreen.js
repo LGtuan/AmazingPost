@@ -22,9 +22,13 @@ const SearchScreen = ({ navigation, route }) => {
     getData();
   }, []);
 
-  const showListSearch = () => {
-    navigation.navigate("ListPeople");
-  }
+  const showListSearch = (textSearch) => {
+    navigation.navigate("ListPeople", {
+      userId: userId,
+      text: textSearch,
+      type: 'search'
+    });
+  };
 
   const getData = async () => {
     const arr = JSON.parse(await AsyncStorage.getItem("searchData" + userId));
@@ -35,10 +39,15 @@ const SearchScreen = ({ navigation, route }) => {
 
   const search = async () => {
     if (text !== "") {
-      const arr = [...data, text];
+      showListSearch(text);
+      var arr = data;
+      if (arr.includes(text)) {
+        var index = arr.indexOf(text);
+        arr.splice(index,1);
+        arr = [text,...arr]
+      }else arr = [text,...arr];
       await AsyncStorage.setItem("searchData" + userId, JSON.stringify(arr));
       setData(arr);
-      setText("");
     }
   };
 
@@ -55,17 +64,22 @@ const SearchScreen = ({ navigation, route }) => {
 
   const historyComponent = (index, text) => {
     return (
-        <View style={{ flexDirection: "row", alignItems: "center" }}>
-          <PeopleLine onPress={showListSearch} source={require("../images/history.png")} text={text} />
-          <TouchableOpacity
-            activeOpacity={0.7}
-            onPress={() => {
-              remove(index);
-            }}
-          >
-            <MaterialIcons name="clear" size={30} color={colors.color7} />
-          </TouchableOpacity>
-        </View>
+      <View style={{ flexDirection: "row", alignItems: "center" , width: '92%'}}>
+        <PeopleLine
+          onPress={() => showListSearch(text)}
+          source={require("../images/history.png")}
+          text={text}
+          size={35}
+        />
+        <TouchableOpacity
+          activeOpacity={0.7}
+          onPress={() => {
+            remove(index);
+          }}
+        >
+          <MaterialIcons name="clear" size={30} color={colors.color7} />
+        </TouchableOpacity>
+      </View>
     );
   };
 

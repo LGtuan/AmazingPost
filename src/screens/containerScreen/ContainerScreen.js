@@ -32,7 +32,7 @@ const FormScreen = () => {
                     <Stack.Screen name='EditProfile' options={{title: 'Edit profile'}} component={EditProfileScreen}/>
                     <Stack.Screen name='EditProfileDetails' options={{title: 'Profile details'}} component={EditProfileDetails}/>
                     <Stack.Screen name='Search' component={SearchScreen} options={{headerShown: false}}/>
-                    <Stack.Screen name='ListPeople' component={ListPeopleScreen}/>
+                    <Stack.Screen name='ListPeople'options={{headerShown: false}} component={ListPeopleScreen}/>
                 </Stack.Navigator>
             </View>
         </NavigationContainer>

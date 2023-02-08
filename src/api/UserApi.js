@@ -14,7 +14,6 @@ export function getUserWithPhone(phone) {
 }
 
 export function getUserWithId(phone) {
-  console.log(phone);
   return fetch(url + "?id=" + phone, {
     method: "GET",
     headers: {
@@ -36,5 +35,17 @@ export function addUser(user) {
   })
     .then((res) => res.json())
     .then((json) => console.log(json))
+    .catch((e) => console.log(e));
+}
+
+export function searchUserByNickName(nickName,userId) {
+  return fetch(url + "?nickName_like=" + nickName+"&id_ne="+userId, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+    .then((res) => res.json())
+    .then((json) => json)
     .catch((e) => console.log(e));
 }
