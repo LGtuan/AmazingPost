@@ -1,9 +1,33 @@
 import { View, Text, ScrollView, StyleSheet, Image } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import LineInfo from "../components/LineInfo";
 import colors from "../colors/color";
 
-const EditProfileScreen = ({navigation}) => {
+import { getUserWithId } from "../api/UserApi";
+
+const EditProfileScreen = ({ navigation, route }) => {
+  const userId = route.params.userId;
+  const [avatar, setAvatar] = useState("");
+  const [background, setBackground] = useState("");
+  const [address,setAddress] = useState("");
+  const [school,setSchool] = useState("");
+  const [work,setWork] = useState("");
+  const [relationship,setRelationship] = useState("");
+
+  useEffect(()=>{
+    getData();
+  },[]);
+
+
+  const getData = async()=>{
+    const user = await getUserWithId(userId);
+    setAvatar(user.avatar);
+    setBackground(user.background);
+    setAddress(user.info.address.name);
+    setSchool(user.info.school.name);
+    setWork(user.info.work.name);
+    setRelationship(user.info.relationship.name);
+  }
 
   return (
     <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
@@ -13,7 +37,11 @@ const EditProfileScreen = ({navigation}) => {
           <Text style={styles.text2}>Chỉnh sửa</Text>
         </View>
         <Image
-          source={require("../images/avatarDefault.png")}
+          source={
+            avatar === ""
+              ? require("../images/avatarDefault.png")
+              : { uri: avatar }
+          }
           style={styles.avatar}
         />
       </View>
@@ -23,29 +51,32 @@ const EditProfileScreen = ({navigation}) => {
           <Text style={styles.text2}>Chỉnh sửa</Text>
         </View>
         <Image
-            source={require("../images/bg.jpg")}
-            resizeMode='cover'
-            style={styles.imgBackground}
-          />
+          source={
+            background === "" ? require("../images/bg.jpg") : { uri: background }
+          }
+          resizeMode="cover"
+          style={styles.imgBackground}
+        />
       </View>
       <View style={styles.detailsContainer}>
         <View style={styles.header}>
           <Text style={styles.text1}>Details</Text>
-          <Text style={styles.text2} onPress={()=>{navigation.navigate('EditProfileDetails')}}>Chỉnh sửa</Text>
+          <Text
+            style={styles.text2}
+            onPress={() => {
+              navigation.navigate("EditProfileDetails",{userId: userId});
+            }}
+          >
+            Chỉnh sửa
+          </Text>
         </View>
         <LineInfo
           iconName="school"
-          content="Từng học tại trường THPT Phúc Thọ"
+          content={school===""? "No infomation" : "Từng học tại "+school}
         />
-        <LineInfo iconName="place" content="Đến từ Hà Nội" />
-        <LineInfo
-          iconName="work"
-          content="Làm việc tại FPT soft ware"
-        />
-        <LineInfo
-          iconName="favorite"
-          content="Single"
-        />
+        <LineInfo iconName="place" content={address===""? "No infomation" :"Đến từ " + address} />
+        <LineInfo iconName="work" content={work===""? "No infomation" :"Làm việc tại" + work} />
+        <LineInfo iconName="favorite" content={relationship===""? "No infomation" : relationship} />
       </View>
     </ScrollView>
   );
@@ -90,13 +121,13 @@ const styles = StyleSheet.create({
     width: 190,
     height: 190,
     borderRadius: 95,
-    alignSelf: 'center'
+    alignSelf: "center",
   },
   imgBackground: {
-    width: '100%',
+    width: "100%",
     height: 250,
-    backgroundColor: 'gray',
+    backgroundColor: "gray",
     marginTop: 10,
-    borderRadius: 16
-  }
+    borderRadius: 16,
+  },
 });

@@ -3,25 +3,19 @@ const url = "http://192.168.76.2:3000/users";
 export function getUserWithPhone(phone) {
   console.log(phone);
   return fetch(url + "?phone=" + phone, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
+    method: "GET"
   })
     .then((res) => res.json())
     .then((json) => json[0])
     .catch((e) => console.log(e));
 }
 
-export function getUserWithId(phone) {
-  return fetch(url + "?id=" + phone, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
+export function getUserWithId(id) {
+  return fetch(url + "/" + id, {
+    method: "GET"
   })
     .then((res) => res.json())
-    .then((json) => json[0])
+    .then((json) => json)
     .catch((e) => console.log(e));
 }
 
@@ -38,14 +32,24 @@ export function addUser(user) {
     .catch((e) => console.log(e));
 }
 
-export function searchUserByNickName(nickName,userId) {
-  return fetch(url + "?nickName_like=" + nickName+"&id_ne="+userId, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
+export function searchUserByNickName(nickName, userId) {
+  return fetch(url + "?nickName_like=" + nickName + "&id_ne=" + userId, {
+    method: "GET"
   })
     .then((res) => res.json())
     .then((json) => json)
+    .catch((e) => console.log(e));
+}
+
+export function updateInfoUser(user,id) {
+  return fetch(url + "/" + id, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(user)
+  })
+    .then((res) => res.json())
+    .then((json) => {console.log(json)})
     .catch((e) => console.log(e));
 }

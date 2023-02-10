@@ -1,18 +1,85 @@
-import { View, Text, ScrollView, StyleSheet, TextInput } from "react-native";
-import React from "react";
+import {
+  View,
+  Text,
+  ScrollView,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+} from "react-native";
+import React, { useEffect, useState } from "react";
 import Checkbox from "expo-checkbox";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import FiledInput from "../components/filedInput/FiledInput";
 import colors from "../colors/color";
+import { getUserWithId } from "../api/UserApi";
+import { updateInfoUser } from "../api/UserApi";
 
-const EditProfileDetails = () => {
+const EditProfileDetails = ({ navigation, route }) => {
+  const userId = route.params.userId;
+
+  const [address, setAddress] = useState("");
+  const [showAddress, setShowAddress] = useState(false);
+
+  const [school, setSchool] = useState("");
+  const [showSchool, setShowSchool] = useState(false);
+
+  const [work, setWork] = useState("");
+  const [showWork, setShowWork] = useState(false);
+
+  const [relationship, setRelationship] = useState("");
+  const [showRelationship, setShowRelationship] = useState(false);
+
+  useEffect(() => {
+    getData();
+  }, []);
+
+  const updateInfo = async() => {
+    const info = {
+      school : {
+        name: school,
+        show: showSchool
+      },
+      address : {
+        name: address,
+        show: showAddress
+      },
+      relationship : {
+        name: relationship,
+        show: showRelationship
+      },
+      work : {
+        name: work,
+        show: showWork
+      }
+    }
+
+    await updateInfoUser({info: info},userId);
+
+  }
+
+  const getData = async () => {
+    const user = await getUserWithId(userId);
+
+    setAddress(user.info.address.name);
+    setShowAddress(user.info.address.show);
+
+    setSchool(user.info.school.name);
+    setShowSchool(user.info.school.show);
+
+    setWork(user.info.work.name);
+    setShowWork(user.info.work.show);
+
+    setRelationship(user.info.relationship.name);
+    setShowRelationship(user.info.relationship.show);
+  };
+
   return (
     <ScrollView style={styles.container}>
       <View style={styles.item}>
         <View style={styles.header}>
           <Text style={styles.text1}>Công việc</Text>
           <View style={{ flexDirection: "row" }}>
-            <Checkbox style={styles.checkbox} />
+            <Checkbox value={showWork} onValueChange={()=> setShowWork(!showWork)} style={styles.checkbox} />
             <Text style={styles.text2}>Công khai</Text>
           </View>
         </View>
@@ -24,15 +91,21 @@ const EditProfileDetails = () => {
             alignItems: "center",
           }}
         >
-          <TextInput cursorColor={"black"} style={styles.input} />
-          <MaterialIcons name="edit" color={"black"} size={30} />
+          <TextInput
+            value={work}
+            onChangeText={setWork}
+            cursorColor={"black"}
+            style={styles.input}
+            placeholder="Job"
+          />
+          {/* <MaterialIcons name="edit" color={"black"} size={30} /> */}
         </View>
       </View>
       <View style={styles.item}>
         <View style={styles.header}>
           <Text style={styles.text1}>Quê quán</Text>
           <View style={{ flexDirection: "row" }}>
-            <Checkbox style={styles.checkbox} />
+            <Checkbox value={showAddress} onValueChange={()=> setShowAddress(!showAddress)} style={styles.checkbox} />
             <Text style={styles.text2}>Công khai</Text>
           </View>
         </View>
@@ -44,15 +117,21 @@ const EditProfileDetails = () => {
             alignItems: "center",
           }}
         >
-          <TextInput cursorColor={"black"} style={styles.input} />
-          <MaterialIcons name="edit" color={"black"} size={30} />
+          <TextInput
+            value={address}
+            onChangeText={setAddress}
+            cursorColor={"black"}
+            style={styles.input}
+            placeholder="Address"
+          />
+          {/* <MaterialIcons name="edit" color={"black"} size={30} /> */}
         </View>
       </View>
       <View style={styles.item}>
         <View style={styles.header}>
           <Text style={styles.text1}>Học vấn</Text>
           <View style={{ flexDirection: "row" }}>
-            <Checkbox style={styles.checkbox} />
+            <Checkbox value={showSchool} onValueChange={()=> setShowSchool(!showSchool)} style={styles.checkbox} />
             <Text style={styles.text2}>Công khai</Text>
           </View>
         </View>
@@ -64,15 +143,21 @@ const EditProfileDetails = () => {
             alignItems: "center",
           }}
         >
-          <TextInput cursorColor={"black"} style={styles.input} />
-          <MaterialIcons name="edit" color={"black"} size={30} />
+          <TextInput
+            value={school}
+            onChangeText={setSchool}
+            cursorColor={"black"}
+            style={styles.input}
+            placeholder="School"
+          />
+          {/* <MaterialIcons name="edit" color={"black"} size={30} /> */}
         </View>
       </View>
       <View style={styles.item}>
         <View style={styles.header}>
           <Text style={styles.text1}>Mối quan hệ</Text>
           <View style={{ flexDirection: "row" }}>
-            <Checkbox style={styles.checkbox} />
+            <Checkbox value={showRelationship} onValueChange={()=> setShowRelationship(!showRelationship)} style={styles.checkbox} />
             <Text style={styles.text2}>Công khai</Text>
           </View>
         </View>
@@ -84,10 +169,21 @@ const EditProfileDetails = () => {
             alignItems: "center",
           }}
         >
-          <TextInput cursorColor={"black"} style={styles.input} />
-          <MaterialIcons name="edit" color={"black"} size={30} />
+          <TextInput
+            value={relationship}
+            onChangeText={setRelationship}
+            cursorColor={"black"}
+            style={styles.input}
+            placeholder="Relationship"
+          />
+          {/* <MaterialIcons name="edit" color={"black"} size={30} /> */}
         </View>
       </View>
+      <TouchableOpacity style={styles.saveBtn}>
+        <Text style={[styles.text1, { color: colors.white, fontSize: 15 }]} onPress={()=> updateInfo()}>
+          Save
+        </Text>
+      </TouchableOpacity>
     </ScrollView>
   );
 };
@@ -98,12 +194,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingHorizontal: 8,
-    backgroundColor: 'white'
+    backgroundColor: "white",
   },
   item: {
     borderBottomWidth: 1.4,
     borderBottomColor: colors.color6,
-    paddingVertical: 16
+    paddingVertical: 16,
   },
   header: {
     flexDirection: "row",
@@ -124,7 +220,7 @@ const styles = StyleSheet.create({
     borderColor: "black",
   },
   input: {
-    width: "85%",
+    width: "90%",
     borderRadius: 14,
     height: 40,
     backgroundColor: "#F8FBFF",
@@ -134,5 +230,15 @@ const styles = StyleSheet.create({
     borderColor: "#2E3154",
     fontSize: 16,
     fontFamily: "AndikaNewBasic",
+  },
+  saveBtn: {
+    alignSelf: "flex-end",
+    backgroundColor: colors.color4,
+    borderRadius: 4,
+    paddingHorizontal: 15,
+    paddingBottom: 8,
+    paddingTop: 3,
+    marginTop: 15,
+    marginEnd: 5,
   },
 });

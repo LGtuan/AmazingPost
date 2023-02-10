@@ -3,9 +3,7 @@ import {
   Text,
   Image,
   TouchableOpacity,
-  Touchable,
   ScrollView,
-  FlatList,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
@@ -17,11 +15,23 @@ import LineInfo from "../../components/LineInfo";
 
 const UserApi = require("../../api/UserApi.js");
 
+const info = {
+  name: "",
+  show: false,
+};
+
 const ProfileScreen = ({ stackNavigation, userId }) => {
   const [avatar, setAvatar] = useState("");
   const [background, setBackground] = useState("");
   const [nickName, setNickName] = useState("");
   const [type, setType] = useState("");
+  const [follower, setFollower] = useState(0);
+  const [following, setFollowing] = useState(0);
+
+  const [address, setAddress] = useState(info);
+  const [school, setSchool] = useState(info);
+  const [work, setWork] = useState(info);
+  const [relationship, setRelationship] = useState(info);
 
   useEffect(() => {
     getData();
@@ -32,7 +42,14 @@ const ProfileScreen = ({ stackNavigation, userId }) => {
     setAvatar(user.avatar);
     setBackground(user.background);
     setNickName(user.nickName);
+    setFollower(user.follower.length);
+    setFollowing(user.following.length);
     setType(user.type);
+
+    setWork(user.info.work);
+    setAddress(user.info.address);
+    setRelationship(user.info.relationship);
+    setSchool(user.info.school);
   };
 
   const showEditProfileScreen = () => {
@@ -40,7 +57,7 @@ const ProfileScreen = ({ stackNavigation, userId }) => {
   };
 
   const showEditProfileDetails = () => {
-    stackNavigation.navigate("EditProfileDetails");
+    stackNavigation.navigate("EditProfileDetails", { userId: userId });
   };
 
   const data = [1, 2, 3, 4, 5];
@@ -92,7 +109,7 @@ const ProfileScreen = ({ stackNavigation, userId }) => {
           <Text style={styles.text1}>{nickName}</Text>
           <View style={styles.followContainer}>
             <Text>
-              <Text style={styles.textBold}>23K</Text> người theo dõi
+              <Text style={styles.textBold}>{follower}</Text> người theo dõi
             </Text>
             <View
               style={{
@@ -104,7 +121,7 @@ const ProfileScreen = ({ stackNavigation, userId }) => {
               }}
             />
             <Text>
-              <Text style={styles.textBold}>15</Text> đang theo dõi
+              <Text style={styles.textBold}>{following}</Text> đang theo dõi
             </Text>
           </View>
         </View>
@@ -121,13 +138,18 @@ const ProfileScreen = ({ stackNavigation, userId }) => {
           <Text style={[styles.text1, { fontSize: 18, marginBottom: 5 }]}>
             Chi Tiết
           </Text>
-          <LineInfo
-            iconName="school"
-            content="Từng học tại trường THPT Phúc Thọ"
-          />
-          <LineInfo iconName="place" content="Đến từ Hà Nội" />
-          <LineInfo iconName="favorite" content="Độc thân" />
-          <LineInfo iconName="more-horiz" content="Xem thông tin của bạn" />
+          {school.show && <LineInfo iconName="school" content={school.name} />}
+          {work.show && <LineInfo iconName="work" content={work.name} />}
+          {address.show && <LineInfo iconName="place" content={address.name} />}
+          {relationship.show && (
+            <LineInfo iconName="favorite" content={relationship.name} />
+          )}
+          {!school.show && !work.show && !address.show && !relationship.show && (
+            <LineInfo
+              iconName="security"
+              content={"You are not share any infomation"}
+            />
+          )}
         </View>
         <TouchableOpacity
           onPress={showEditProfileDetails}
