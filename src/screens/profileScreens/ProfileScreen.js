@@ -21,6 +21,7 @@ const ProfileScreen = ({ stackNavigation, userId }) => {
   const [avatar, setAvatar] = useState("");
   const [background, setBackground] = useState("");
   const [nickName, setNickName] = useState("");
+  const [type, setType] = useState("");
 
   useEffect(() => {
     getData();
@@ -31,10 +32,11 @@ const ProfileScreen = ({ stackNavigation, userId }) => {
     setAvatar(user.avatar);
     setBackground(user.background);
     setNickName(user.nickName);
+    setType(user.type);
   };
 
   const showEditProfileScreen = () => {
-    stackNavigation.navigate("EditProfile",{userId: userId});
+    stackNavigation.navigate("EditProfile", { userId: userId });
   };
 
   const showEditProfileDetails = () => {
@@ -61,6 +63,30 @@ const ProfileScreen = ({ stackNavigation, userId }) => {
               style={styles.avatar}
             />
           </View>
+          {type == "admin" && (
+            <View
+              style={{
+                width: "100%",
+                justifyContent: "flex-end",
+                flexDirection: "row",
+                alignItems: "center",
+              }}
+            >
+              <MaterialIcons
+                name="admin-panel-settings"
+                size={30}
+                color={colors.color4}
+              />
+              <Text
+                style={[
+                  styles.text1,
+                  { color: colors.color4, fontSize: 18, padding: 3 },
+                ]}
+              >
+                Admin
+              </Text>
+            </View>
+          )}
         </View>
         <View style={styles.infoContainer}>
           <Text style={styles.text1}>{nickName}</Text>

@@ -47,7 +47,9 @@ const ListPeopleScreen = ({ navigation, route }) => {
     navigation.goBack();
   };
 
-  const showProfile = (index) => {};
+  const showProfile = (index) => {
+    navigation.navigate('PeopleProfile',{peopleId: data[index].id});
+  };
 
   return (
     <View style={styles.container}>
@@ -75,6 +77,7 @@ const ListPeopleScreen = ({ navigation, route }) => {
               <PeopleLine
                 source={{ uri: item.avatar }}
                 text={item.nickName}
+                type={item.type}
                 onPress={() => {
                   showProfile(index);
                 }}

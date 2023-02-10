@@ -15,6 +15,7 @@ import EditProfileScreen from '../EditProfileScreen'
 import EditProfileDetails from '../EditProfileDetails'
 import SearchScreen from '../SearchScreen'
 import ListPeopleScreen from '../ListPeopleScreen'
+import PeopleProfile from '../PeopleProfile'
 
 const Stack = createNativeStackNavigator();
 
@@ -33,6 +34,7 @@ const FormScreen = () => {
                     <Stack.Screen name='EditProfileDetails' options={{title: 'Profile details'}} component={EditProfileDetails}/>
                     <Stack.Screen name='Search' component={SearchScreen} options={{headerShown: false}}/>
                     <Stack.Screen name='ListPeople'options={{headerShown: false}} component={ListPeopleScreen}/>
+                    <Stack.Screen name='PeopleProfile' component={PeopleProfile}/>
                 </Stack.Navigator>
             </View>
         </NavigationContainer>

@@ -64,7 +64,7 @@ const SearchScreen = ({ navigation, route }) => {
 
   const historyComponent = (index, text) => {
     return (
-      <View style={{ flexDirection: "row", alignItems: "center" , width: '92%'}}>
+      <View style={{ flexDirection: "row", alignItems: "center" , width: '100%'}}>
         <PeopleLine
           onPress={() => showListSearch(text)}
           source={require("../images/history.png")}
@@ -76,6 +76,7 @@ const SearchScreen = ({ navigation, route }) => {
           onPress={() => {
             remove(index);
           }}
+          style={{position: 'absolute',right: 5,top: 15}}
         >
           <MaterialIcons name="clear" size={30} color={colors.color7} />
         </TouchableOpacity>
