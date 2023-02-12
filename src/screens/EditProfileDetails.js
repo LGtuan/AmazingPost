@@ -179,8 +179,8 @@ const EditProfileDetails = ({ navigation, route }) => {
           {/* <MaterialIcons name="edit" color={"black"} size={30} /> */}
         </View>
       </View>
-      <TouchableOpacity style={styles.saveBtn}>
-        <Text style={[styles.text1, { color: colors.white, fontSize: 15 }]} onPress={()=> updateInfo()}>
+      <TouchableOpacity style={styles.saveBtn} onPress={()=> updateInfo()}>
+        <Text style={[styles.text1, { color: colors.white, fontSize: 15 }]}>
           Save
         </Text>
       </TouchableOpacity>

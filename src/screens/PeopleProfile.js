@@ -52,7 +52,7 @@ const PeopleProfile = ({ navigation, route }) => {
     const user = await UserApi.getUserWithId(userId);
     if(arr.includes(userId)){
       arr.splice(arr.indexOf(userId),1);
-      user.following.splice(user.info.indexOf(peopleId),1);
+      user.following.splice(user.following.indexOf(peopleId),1);
     }else{
       arr.push(userId);
       user.following.push(peopleId);

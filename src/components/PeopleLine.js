@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   imgHeader: {
-    borderRadius: 30,
+    borderRadius: 50,
     resizeMode: "contain",
   },
   text1: {

@@ -48,8 +48,8 @@ const EntertaimentScreen = () => {
           keyExtractor={(item) => { return item.source }}
           renderItem={({ item, index }) => videoInterface(item.content, item.source, index, index === activeIndex, isPlaying, setPlay)}
           showsVerticalScrollIndicator={false}
-          snapToAlignment={'start'}
-          decelerationRate={'fast'}
+          snapToAlignment='start'
+          decelerationRate='fast'
           snapToInterval={ScreenHeight - 147}
           onScroll={e => {
             const index = Math.round(e.nativeEvent.contentOffset.y / (ScreenHeight - 147));

@@ -63,7 +63,7 @@ const ProfileScreen = ({ stackNavigation, userId }) => {
   const data = [1, 2, 3, 4, 5];
 
   return (
-    <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
+    <ScrollView showsVerticalScrollIndicator={false} style={styles.container} >
       <View style={styles.box1}>
         <View style={styles.images}>
           <Image

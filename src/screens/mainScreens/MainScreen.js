@@ -14,6 +14,7 @@ import ProfileScreen from "../profileScreens/ProfileScreen";
 import colors from "../../colors/color";
 import CustomButton from "../../components/button/CustomButton";
 import { StatusBar } from "expo-status-bar";
+import MenuScreen from "../MenuScreen";
 
 export var userId;
 
@@ -63,6 +64,9 @@ const MainScreen = ({ navigation, route }) => {
                 : "notifications-outline";
             } else if (route.name === "Entertaiment") {
               iconName = focused ? "play-circle-sharp" : "play-circle-outline";
+            } else if (route.name === "Menu") {
+              iconName = "menu";
+              size+=2;
             }
             return <Ionicons name={iconName} size={size} color={color} />;
           },
@@ -98,6 +102,9 @@ const MainScreen = ({ navigation, route }) => {
         <Tab.Screen name="Notification" component={NotificationScreen} />
         <Tab.Screen name="Profile">
             {(props)=> <ProfileScreen {...props} stackNavigation={navigation} userId={userId} />}
+        </Tab.Screen>
+        <Tab.Screen name="Menu">
+          {(props) => <MenuScreen {...props} stackNavigation={navigation} userId={userId}/>}
         </Tab.Screen>
       </Tab.Navigator>
     </NavigationContainer>
