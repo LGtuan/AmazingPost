@@ -16,6 +16,8 @@ import EditProfileDetails from '../EditProfileDetails'
 import SearchScreen from '../SearchScreen'
 import ListPeopleScreen from '../ListPeopleScreen'
 import PeopleProfile from '../PeopleProfile'
+import ChangePasswordScreen from '../ChangePasswordScreen'
+import ForgotPasswordScreen from '../ForgotPasswordScreen'
 
 const Stack = createNativeStackNavigator();
 
@@ -24,7 +26,7 @@ const FormScreen = () => {
         <NavigationContainer>
             <View style={styles.container}>
                 <StatusBar style='auto' />
-                <Stack.Navigator initialRouteName='Introduce'>
+                <Stack.Navigator initialRouteName='LogIn'>
                     <Stack.Screen name='Introduce' component={IntroduceScreen}  options={{headerShown: false}}/>
                     <Stack.Screen name='LogIn' component={LoginInScreen}  options={{headerShown: false}}/>
                     <Stack.Screen name='SignUp' component={SignUpScreen}  options={{headerShown: false}}/>
@@ -35,6 +37,8 @@ const FormScreen = () => {
                     <Stack.Screen name='Search' component={SearchScreen} options={{headerShown: false}}/>
                     <Stack.Screen name='ListPeople'options={{headerShown: false}} component={ListPeopleScreen}/>
                     <Stack.Screen name='PeopleProfile' options={{title:""}} component={PeopleProfile}/>
+                    <Stack.Screen name='ChangePassword' component={ChangePasswordScreen}/>
+                    <Stack.Screen name='ForgotPassword' component={ForgotPasswordScreen}/>
                 </Stack.Navigator>
             </View>
         </NavigationContainer>

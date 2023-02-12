@@ -138,9 +138,9 @@ const ProfileScreen = ({ stackNavigation, userId }) => {
           <Text style={[styles.text1, { fontSize: 18, marginBottom: 5 }]}>
             Chi Tiết
           </Text>
-          {school.show && <LineInfo iconName="school" content={school.name} />}
-          {work.show && <LineInfo iconName="work" content={work.name} />}
-          {address.show && <LineInfo iconName="place" content={address.name} />}
+          {school.show && <LineInfo iconName="school" content={'Đã học tại ' + school.name} />}
+          {work.show && <LineInfo iconName="work" content={'Làm việc tại '+work.name} />}
+          {address.show && <LineInfo iconName="place" content={'Đến từ ' + address.name} />}
           {relationship.show && (
             <LineInfo iconName="favorite" content={relationship.name} />
           )}

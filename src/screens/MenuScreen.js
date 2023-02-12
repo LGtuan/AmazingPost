@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import colors from "../colors/color";
 import PeopleLine from "../components/PeopleLine";
+import CreatePostsScreen from "./createPostsScreen/CreatePostsScreen";
 
 const UserApi = require("../api/UserApi");
 
@@ -10,6 +11,26 @@ const MenuScreen = ({ stackNavigation, userId }) => {
   const [avatar, setAvatar] = useState("");
   const [nickName, setNickName] = useState("");
   const [type, setType] = useState("");
+
+  const switchToListPeople = (type) => {
+    stackNavigation.navigate('ListPeople',{userId: userId, type: type})
+  }
+
+  const switchToCreatePostsScreen = () => {
+    stackNavigation.navigate('CreatePost');
+  }
+
+  const switchToChangePassScreen = () => {
+    stackNavigation.navigate('ChangePassword');
+  }
+
+  const switchToForgortPassword = () => {
+    stackNavigation.navigate('ForgotPassword');
+  }
+
+  const logout = () => {
+    stackNavigation.popToTop();
+  }
 
   useEffect(() => {
     getData();
@@ -44,24 +65,24 @@ const MenuScreen = ({ stackNavigation, userId }) => {
           <View style={{ width: "100%" }}>
             <Text style={styles.text2}>Tất cả lối tắt</Text>
           </View>
-          {shadowButton(require('../images/icon_follower.png'),'Người theo dõi')}
-          {shadowButton(require('../images/icon_follower.png'),'Đang theo dõi')}
-          {shadowButton(require('../images/edit_posts.png'),"Bài đăng")}
+          {shadowButton(require('../images/icon_follower.png'),'Người theo dõi',()=> switchToListPeople('follower'))}
+          {shadowButton(require('../images/icon_follower.png'),'Đang theo dõi',() => switchToListPeople('following'))}
+          {shadowButton(require('../images/edit_posts.png'),"Bài đăng",switchToCreatePostsScreen)}
           <View style={{ width: "100%", marginTop:10 }}>
             <Text style={styles.text2}>Cài đặt</Text>
           </View>
-          {shadowButton(require('../images/padlock.png'),"Thay đổi mật khẩu")}
-          {shadowButton(require('../images/forgort.png'),"Quên mật khẩu")}
-          {shadowButton(require('../images/logout.png'),"Đăng xuất")}
+          {shadowButton(require('../images/padlock.png'),"Thay đổi mật khẩu",switchToChangePassScreen)}
+          {shadowButton(require('../images/forgort.png'),"Quên mật khẩu",switchToForgortPassword)}
+          {shadowButton(require('../images/logout.png'),"Đăng xuất",logout)}
         </View>
       </View>
     </View>
   );
 };
 
-function shadowButton(source,title) {
+function shadowButton(source,title,onPress) {
   return (
-    <TouchableOpacity activeOpacity={0.6} style={styles.shadowButton}>
+    <TouchableOpacity activeOpacity={0.6} onPress={onPress} style={styles.shadowButton}>
       <Image source={source}/>
       <Text style={styles.text3}>{title}</Text>
     </TouchableOpacity>

@@ -39,9 +39,17 @@ const ListPeopleScreen = ({ navigation, route }) => {
 
   const getFriends = async () => {};
 
-  const getFollowers = async () => {};
+  const getFollowers = async () => {
+    const user = await UserApi.getUserWithId(userId);
+    const follower = user.follower;
+    setData(await UserApi.getUserWithArr(follower));
+  };
 
-  const getFollowings = async () => {};
+  const getFollowings = async () => {
+    const user = await UserApi.getUserWithId(userId);
+    const following = user.following;
+    setData(await UserApi.getUserWithArr(following));
+  };
 
   const backAction = () => {
     navigation.goBack();
