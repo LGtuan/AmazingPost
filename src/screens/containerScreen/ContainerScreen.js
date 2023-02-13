@@ -35,10 +35,10 @@ const FormScreen = () => {
                     <Stack.Screen name='EditProfile' options={{title: 'Edit profile'}} component={EditProfileScreen}/>
                     <Stack.Screen name='EditProfileDetails' options={{title: 'Profile details'}} component={EditProfileDetails}/>
                     <Stack.Screen name='Search' component={SearchScreen} options={{headerShown: false}}/>
-                    <Stack.Screen name='ListPeople'options={{headerShown: false}} component={ListPeopleScreen}/>
+                    <Stack.Screen name='ListPeople' options={{headerShown: false}} component={ListPeopleScreen}/>
                     <Stack.Screen name='PeopleProfile' options={{title:""}} component={PeopleProfile}/>
-                    <Stack.Screen name='ChangePassword' component={ChangePasswordScreen}/>
-                    <Stack.Screen name='ForgotPassword' component={ForgotPasswordScreen}/>
+                    <Stack.Screen name='ChangePassword' options={{headerShown: false}} component={ChangePasswordScreen}/>
+                    <Stack.Screen name='ForgotPassword' options={{headerShown: false}} component={ForgotPasswordScreen}/>
                 </Stack.Navigator>
             </View>
         </NavigationContainer>

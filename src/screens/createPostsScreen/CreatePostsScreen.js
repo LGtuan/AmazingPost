@@ -5,7 +5,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons'
 import colors from '../../colors/color';
 import { StatusBar } from 'expo-status-bar';
 
-const CreatePostsScreen = ({ navigation }) => {
+const CreatePostsScreen = ({ navigation,route }) => {
   
   const backAction = () => {
     navigation.goBack();

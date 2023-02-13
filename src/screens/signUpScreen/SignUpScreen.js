@@ -14,7 +14,7 @@ import CustomButton from "../../components/button/CustomButton";
 import LogoButton from "../../components/button/LogoButton";
 import styles from "./styles";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import Toast from 'react-native-simple-toast'
+import Toast from "react-native-simple-toast";
 
 const UserApi = require("../../api/UserApi.js");
 
@@ -39,12 +39,32 @@ const SignUpScreen = ({ navigation }) => {
       setError("* Password not match");
       return false;
     }
-    user = { phone: phone, nickName: nickName, password: pass1 };
+    const infomation = { name: "", show: false };
+    user = {
+      phone: phone,
+      nickName: nickName,
+      password: pass1,
+      avatar: "",
+      background: "",
+      type: "user",
+      follower: [],
+      following: [],
+      info: {
+        school: infomation,
+        address: infomation,
+        relationship: infomation,
+        work: infomation,
+      },
+    }
+
     await UserApi.addUser(user);
 
-    await AsyncStorage.setItem("account",JSON.stringify({phone: phone, password: pass1, remember: true}));
-    
-    Toast.show("Sign Up success",Toast.LONG);
+    await AsyncStorage.setItem(
+      "account",
+      JSON.stringify({ phone: phone, password: pass1, remember: true })
+    );
+
+    Toast.show("Sign Up success", Toast.LONG);
     navigation.navigate("LogIn");
   };
 

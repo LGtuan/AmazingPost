@@ -21,7 +21,7 @@ const MenuScreen = ({ stackNavigation, userId }) => {
   }
 
   const switchToChangePassScreen = () => {
-    stackNavigation.navigate('ChangePassword');
+    stackNavigation.navigate('ChangePassword',{userId: userId});
   }
 
   const switchToForgortPassword = () => {
