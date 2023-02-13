@@ -4,6 +4,7 @@ import {
   Image,
   TouchableOpacity,
   ScrollView,
+  RefreshControl,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
@@ -12,8 +13,7 @@ import styles from "./style";
 import colors from "../../colors/color";
 import Posts from "../../components/posts/Posts";
 import LineInfo from "../../components/LineInfo";
-
-const UserApi = require("../../api/UserApi.js");
+import { getUserWithId, getUserWithPosts } from "../../api/UserApi";
 
 const info = {
   name: "",
@@ -21,12 +21,16 @@ const info = {
 };
 
 const ProfileScreen = ({ stackNavigation, userId }) => {
+  const [isLoading,setLoading] = useState(true);
+
   const [avatar, setAvatar] = useState("");
   const [background, setBackground] = useState("");
   const [nickName, setNickName] = useState("");
   const [type, setType] = useState("");
   const [follower, setFollower] = useState(0);
   const [following, setFollowing] = useState(0);
+
+  const [posts, setPosts] = useState([]);
 
   const [address, setAddress] = useState(info);
   const [school, setSchool] = useState(info);
@@ -38,7 +42,8 @@ const ProfileScreen = ({ stackNavigation, userId }) => {
   }, []);
 
   const getData = async () => {
-    var user = await UserApi.getUserWithId(userId);
+    setLoading(true);
+    var user = await getUserWithPosts(userId);
     setAvatar(user.avatar);
     setBackground(user.background);
     setNickName(user.nickName);
@@ -50,6 +55,9 @@ const ProfileScreen = ({ stackNavigation, userId }) => {
     setAddress(user.info.address);
     setRelationship(user.info.relationship);
     setSchool(user.info.school);
+
+    setPosts(user.posts);
+    setLoading(false);
   };
 
   const showEditProfileScreen = () => {
@@ -60,10 +68,14 @@ const ProfileScreen = ({ stackNavigation, userId }) => {
     stackNavigation.navigate("EditProfileDetails", { userId: userId });
   };
 
-  const data = [1, 2, 3, 4, 5];
-
   return (
-    <ScrollView showsVerticalScrollIndicator={false} style={styles.container} >
+    <ScrollView
+      refreshControl={
+        <RefreshControl refreshing={isLoading} onRefresh={getData} />
+      }
+      showsVerticalScrollIndicator={false}
+      style={styles.container}
+    >
       <View style={styles.box1}>
         <View style={styles.images}>
           <Image
@@ -138,18 +150,27 @@ const ProfileScreen = ({ stackNavigation, userId }) => {
           <Text style={[styles.text1, { fontSize: 18, marginBottom: 5 }]}>
             Chi Tiết
           </Text>
-          {school.show && <LineInfo iconName="school" content={'Đã học tại ' + school.name} />}
-          {work.show && <LineInfo iconName="work" content={'Làm việc tại '+work.name} />}
-          {address.show && <LineInfo iconName="place" content={'Đến từ ' + address.name} />}
+          {school.show && (
+            <LineInfo iconName="school" content={"Đã học tại " + school.name} />
+          )}
+          {work.show && (
+            <LineInfo iconName="work" content={"Làm việc tại " + work.name} />
+          )}
+          {address.show && (
+            <LineInfo iconName="place" content={"Đến từ " + address.name} />
+          )}
           {relationship.show && (
             <LineInfo iconName="favorite" content={relationship.name} />
           )}
-          {!school.show && !work.show && !address.show && !relationship.show && (
-            <LineInfo
-              iconName="security"
-              content={"You are not share any infomation"}
-            />
-          )}
+          {!school.show &&
+            !work.show &&
+            !address.show &&
+            !relationship.show && (
+              <LineInfo
+                iconName="security"
+                content={"You are not share any infomation"}
+              />
+            )}
         </View>
         <TouchableOpacity
           onPress={showEditProfileDetails}
@@ -172,9 +193,17 @@ const ProfileScreen = ({ stackNavigation, userId }) => {
         >
           Danh sách bài viết
         </Text>
-        {data.map((item, index) => (
-          <Posts key={index} />
-        ))}
+        {posts.map((item, index) => {
+          return (
+            <Posts
+              avatar={avatar}
+              post={item}
+              nickName={nickName}
+              userId={userId}
+              key={index}
+            />
+          );
+        })}
       </View>
     </ScrollView>
   );

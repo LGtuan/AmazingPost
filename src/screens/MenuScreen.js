@@ -17,7 +17,7 @@ const MenuScreen = ({ stackNavigation, userId }) => {
   }
 
   const switchToCreatePostsScreen = () => {
-    stackNavigation.navigate('CreatePost');
+    stackNavigation.navigate('CreatePost',{userId: userId});
   }
 
   const switchToChangePassScreen = () => {

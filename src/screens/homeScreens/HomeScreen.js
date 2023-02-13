@@ -1,24 +1,49 @@
-import { View, Text, ScrollView, TouchableOpacity, Image, TextInput } from 'react-native'
-import React, { useState } from 'react'
+import {
+  View,
+  Text,
+  ScrollView,
+  TouchableOpacity,
+  Image,
+  TextInput,
+  RefreshControl,
+} from "react-native";
+import React, { useEffect, useState } from "react";
 
-import { FlatList } from 'react-native'
-import { Ionicons } from '@expo/vector-icons';
+import { FlatList } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 
-import styles from './style'
-import Posts from '../../components/posts/Posts';
-import colors from '../../colors/color';
-import IconText from '../../components/iconText/IconText';
+import styles from "./style";
+import Posts from "../../components/posts/Posts";
+import colors from "../../colors/color";
+import IconText from "../../components/iconText/IconText";
 
-const HomeScreen = ({ stackNavigation,userId }) => {
-  const arr = [1, 2, 3, 4, 5];
+import { getUserWithId } from "../../api/UserApi";
+import { getAllPost } from "../../api/PostApi";
+
+const HomeScreen = ({ stackNavigation, userId }) => {
+  const [isLoading, setIsLoading] = useState();
+  const [posts, setPosts] = useState([]);
+  const [avatar, setAvatar] = useState("");
+
+  useEffect(() => {
+    getData();
+  }, []);
+
+  const getData = async () => {
+    setIsLoading(true);
+    const user = await getUserWithId(userId);
+    setAvatar(user.avatar);
+    setPosts(await getAllPost());
+    setIsLoading(false);
+  };
 
   const createPosts = () => {
-    stackNavigation.navigate('CreatePost');
-  }
+    stackNavigation.navigate("CreatePost", { userId: userId });
+  };
 
   const search = () => {
-    stackNavigation.navigate('Search',{userId: userId});
-  }
+    stackNavigation.navigate("Search", { userId: userId });
+  };
 
   return (
     <View>
@@ -27,13 +52,24 @@ const HomeScreen = ({ stackNavigation,userId }) => {
           <View style={styles.header1}>
             <Text style={styles.title}>Amazing Posts</Text>
             <View style={styles.menu}>
-              <TouchableOpacity onPress={search} activeOpacity={0.4} style={styles.searchBtn}>
+              <TouchableOpacity
+                onPress={search}
+                activeOpacity={0.4}
+                style={styles.searchBtn}
+              >
                 <Ionicons name="search" size={20} color="black" />
               </TouchableOpacity>
             </View>
           </View>
           <View style={styles.header2}>
-            <Image source={require('../../images/avatarDefault.png')} style={styles.imgHeader} />
+            <Image
+              source={
+                avatar === ""
+                  ? require("../../images/avatarDefault.png")
+                  : { uri: avatar }
+              }
+              style={styles.imgHeader}
+            />
             <TouchableOpacity onPress={createPosts} style={styles.btnPosts}>
               <Text style={styles.label}>What are you thinking?</Text>
             </TouchableOpacity>
@@ -41,16 +77,32 @@ const HomeScreen = ({ stackNavigation,userId }) => {
         </View>
         <View style={styles.body}>
           <FlatList
+            refreshControl={
+              <RefreshControl
+                refreshing={isLoading}
+                onRefresh={() => {
+                 getData();
+                }}
+              />
+            }
             contentContainerStyle={{ paddingBottom: 120 }}
             showsVerticalScrollIndicator={false}
-            data={arr}
-            renderItem={(item) => {
-              return <Posts />
-            }} />
+            data={posts}
+            renderItem={({ item, index }) => {
+              return (
+                <Posts
+                  avatar={item.user.avatar}
+                  nickName={item.user.nickName}
+                  post={item}
+                  userId={userId}
+                />
+              );
+            }}
+          />
         </View>
       </View>
     </View>
-  )
-}
+  );
+};
 
-export default HomeScreen
+export default HomeScreen;

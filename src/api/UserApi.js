@@ -18,6 +18,15 @@ export function getUserWithId(id) {
     .catch((e) => console.log(e));
 }
 
+export function getUserWithPosts(id){
+  return fetch(url + "/" + id+"?_embed=posts", {
+    method: "GET",
+  })
+    .then((res) => res.json())
+    .then((json) => json)
+    .catch((e) => console.log(e));
+}
+
 export function addUser(user) {
   fetch(url, {
     method: "POST",
