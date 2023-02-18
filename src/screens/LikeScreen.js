@@ -1,15 +1,17 @@
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  FlatList,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import React from "react";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import IconText from "../components/iconText/IconText";
+import PeopleLine from "../components/PeopleLine";
 
-const CommentScreen = ({ navigation, route }) => {
+const LikeScreen = ({ navigation, route }) => {
   const likes = route.params.likes;
-  const postId = route.params.postId;
-
-  const showLikeScreen = () =>{
-    navigation.navigate("Like",{postId: postId,likes: likes})
-  }
 
   return (
     <View style={styles.container}>
@@ -19,7 +21,7 @@ const CommentScreen = ({ navigation, route }) => {
           style={{ flexDirection: "row", alignItems: "center" }}
         >
           <MaterialIcons name="arrow-back" size={30} />
-          <Text style={styles.title}>Comment</Text>
+          <Text style={styles.title}>Like of post</Text>
         </TouchableOpacity>
         <TouchableOpacity>
           <IconText
@@ -27,16 +29,28 @@ const CommentScreen = ({ navigation, route }) => {
             status="medium"
             src={require("../images/like.png")}
             src2={require("../images/likeShard.png")}
-            onPress={showLikeScreen}
           />
         </TouchableOpacity>
       </View>
-      <View style={styles.body}></View>
+      <View style={styles.body}>
+        <FlatList
+          contentContainerStyle={{ flex: 1,paddingHorizontal: 6}}
+          data={likes}
+          renderItem={({ item, index }) => (
+              <PeopleLine
+                source={{ uri: item.avatar }}
+                text={item.nickName}
+                size={60}
+                type={item.type}
+              />
+          )}
+        />
+      </View>
     </View>
   );
 };
 
-export default CommentScreen;
+export default LikeScreen;
 
 const styles = StyleSheet.create({
   container: {
@@ -59,5 +73,9 @@ const styles = StyleSheet.create({
     fontFamily: "AndikaNewBasic",
     paddingBottom: 7,
     paddingStart: 8,
+  },
+  body: {
+    flex: 1,
+    backgroundColor: "white",
   },
 });

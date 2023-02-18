@@ -63,6 +63,7 @@ const LoginInScreen = ({ navigation }) => {
       setError("* Phone number or password invalid");
       return false;
     }
+    setError("");
     saveAccount();
     showMainScreen(user.id);
   };

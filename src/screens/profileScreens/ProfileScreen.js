@@ -43,7 +43,7 @@ const ProfileScreen = ({ stackNavigation, userId }) => {
   }, []);
 
   const showCommentScreen = (postId,likes) =>{
-    stackNavigation.navigate("Comment");
+    stackNavigation.navigate("Comment",{postId: postId,likes: likes});
   }
 
   const getData = async () => {
@@ -207,6 +207,7 @@ const ProfileScreen = ({ stackNavigation, userId }) => {
               userId={userId}
               key={index}
               showCommentScreen={showCommentScreen}
+              type={type}
             />
           );
         })}

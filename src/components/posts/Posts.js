@@ -1,21 +1,58 @@
 import { View, Text, Image, TouchableOpacity } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import { Ionicons } from "@expo/vector-icons";
 
 import styles from "./style";
 import colors from "../../colors/color";
 import IconText from "../iconText/IconText";
+import { updatePost } from "../../api/PostApi";
 
-const Posts = ({ userId, avatar, nickName, post,showCommentScreen }) => {
+const Posts = ({ userId, avatar, nickName, post, showCommentScreen, type }) => {
+  const [isLike, setLike] = useState(false);
   const background = post.background;
   const img = post.img;
   const likes = post.likes;
-  console.log(likes);
+
+  useEffect(() => {
+    checkLike();
+  }, []);
 
   const showProfilePeople = () => {
     if (userId !== post.userId) {
     }
+  };
+
+  const checkLike = () => {
+    for (let i = 0; i < likes.length; i++) {
+      if (likes[i].userId === userId) {
+        setLike(true);
+        return;
+      }
+    }
+    setLike(false);
+  };
+
+  const likeClick = () => {
+    let check = false;
+    for (let i = 0; i < likes.length; i++) {
+      if (likes[i].userId === userId) {
+        likes.splice(i, 1);
+        check = true;
+        setLike(false);
+        break;
+      }
+    }
+    if (!check) {
+      likes.push({
+        userId: userId,
+        avatar: avatar,
+        nickName: nickName,
+        type: type,
+      });
+      setLike(true);
+    }
+    updatePost(post.id, { likes: likes });
   };
 
   return (
@@ -81,9 +118,12 @@ const Posts = ({ userId, avatar, nickName, post,showCommentScreen }) => {
           )}
         </View>
         <View style={styles.footer}>
-          <TouchableOpacity onPress={()=>{
-            showCommentScreen(post.id,likes);
-          }} activeOpacity={0.7}>
+          <TouchableOpacity
+            onPress={() => {
+              showCommentScreen(post.id, likes);
+            }}
+            activeOpacity={0.7}
+          >
             <View style={styles.footer1}>
               <IconText
                 src={require("../../images/like.png")}
@@ -110,20 +150,27 @@ const Posts = ({ userId, avatar, nickName, post,showCommentScreen }) => {
             <IconText
               text="Like"
               status="medium"
-              src={require("../../images/like.png")}
-              src2={require("../../images/likeShard.png")}
+              src={
+                isLike
+                  ? require("../../images/likeShard.png")
+                  : require("../../images/like.png")
+              }
+              // src2={require("../../images/likeShard.png")}
+              color={isLike ? colors.color4 : colors.color7}
+              onPress={likeClick}
             />
             <IconText
               text="Comment"
               status="medium"
               src={require("../../images/comment.png")}
-              src2={require("../../images/comment.png")}
+              onPress={() => {
+                showCommentScreen(post.id, likes);
+              }}
             />
             <IconText
               text="Share"
               status="medium"
               src={require("../../images/share2.png")}
-              src2=""
             />
           </View>
         </View>

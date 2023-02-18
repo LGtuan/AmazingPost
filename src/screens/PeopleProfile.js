@@ -92,7 +92,7 @@ const PeopleProfile = ({ navigation, route }) => {
   };
 
   const showCommentScreen = (postId,likes) =>{
-    navigation.navigate("Comment");
+    navigation.navigate("Comment",{postId: postId,likes: likes});
   }
 
   const checkFollow = async (arr) => {
@@ -252,6 +252,7 @@ const PeopleProfile = ({ navigation, route }) => {
             post={item}
             key={index}
             showCommentScreen={showCommentScreen}
+            type={type}
           />
         ))}
       </View>

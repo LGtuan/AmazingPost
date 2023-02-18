@@ -1,4 +1,4 @@
-const url = "http://10.24.42.115:3000/posts";
+const url = "http://192.168.1.4:3000/posts";
 
 export function addPosts(post) {
   fetch(url, {
@@ -27,4 +27,19 @@ export function getAllPostWithUserId(userId){
     method: "GET"
   }).then((res)=> res.json())
   .catch(e => console.log(e));
+}
+
+export function updatePost(postId,post){
+  return fetch(url + "/" + postId, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(post),
+  })
+    .then((res) => res.json())
+    .then((json) => {
+      console.log(json);
+    })
+    .catch((e) => console.log(e));
 }

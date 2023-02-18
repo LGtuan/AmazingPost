@@ -24,6 +24,7 @@ const HomeScreen = ({ stackNavigation, userId }) => {
   const [isLoading, setIsLoading] = useState();
   const [posts, setPosts] = useState([]);
   const [avatar, setAvatar] = useState("");
+  const [type,setType] = useState("user");
 
   useEffect(() => {
     getData();
@@ -33,12 +34,13 @@ const HomeScreen = ({ stackNavigation, userId }) => {
     setIsLoading(true);
     const user = await getUserWithId(userId);
     setAvatar(user.avatar);
+    setType(user.type)
     setPosts(await getAllPost());
     setIsLoading(false);
   };
 
   const showCommentScreen = (postId,likes) =>{
-    stackNavigation.navigate("Comment");
+    stackNavigation.navigate("Comment",{postId: postId,likes: likes});
   }
 
   const createPosts = () => {
@@ -100,6 +102,7 @@ const HomeScreen = ({ stackNavigation, userId }) => {
                   post={item}
                   userId={userId}
                   showCommentScreen={showCommentScreen}
+                  type={type}
                 />
               );
             }}
