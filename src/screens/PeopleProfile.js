@@ -16,6 +16,7 @@ import Posts from "../components/posts/Posts";
 const UserApi = require("../api/UserApi");
 
 import { userId } from "./mainScreens/MainScreen";
+import { getAllPostWithUserId } from "../api/PostApi";
 
 const info = {
   name: "",
@@ -25,7 +26,7 @@ const info = {
 const PeopleProfile = ({ navigation, route }) => {
   const peopleId = route.params.peopleId;
 
-  const data = [1, 2, 3, 4, 5];
+  const [data,setData] = useState([]);
   const [avatar, setAvatar] = useState("");
   const [background, setBackground] = useState("");
   const [nickName, setNickName] = useState("");
@@ -33,45 +34,81 @@ const PeopleProfile = ({ navigation, route }) => {
 
   const [arrFollwer, setArrFollower] = useState([]);
   const [arrfollowing, setArrFollowing] = useState([]);
-
+  const [check, setCheck] = useState(false);
 
   const [address, setAddress] = useState(info);
   const [school, setSchool] = useState(info);
   const [work, setWork] = useState(info);
   const [relationship, setRelationship] = useState(info);
 
-  const [iconFollow,setIconFollow] = useState("user-follow");
-  const [textFollow,setTextFollow] = useState("Theo dõi");
+  const [iconFollow, setIconFollow] = useState("user-follow");
+  const [textFollow, setTextFollow] = useState("Theo dõi");
 
   useEffect(() => {
     getData();
   }, []);
 
-  const followClick = async() => {
+  const followClick = async () => {
     const arr = arrFollwer;
     const user = await UserApi.getUserWithId(userId);
-    if(arr.includes(userId)){
-      arr.splice(arr.indexOf(userId),1);
-      user.following.splice(user.following.indexOf(peopleId),1);
-    }else{
-      arr.push(userId);
-      user.following.push(peopleId);
-    }
-    setArrFollower(arr);
-    await UserApi.updateInfoUser({follower: arr},peopleId);
-    await UserApi.updateInfoUser(user,userId);
-    checkFollow(arr);
-  }
 
-  const checkFollow = async(arr) => {
-    if(arr.includes(userId)){
+    if (!check) {
+      arr.push({
+        userId: userId,
+        nickName: user.nickName,
+        avatar: user.avatar,
+        type: user.type
+      });
+      user.following.push({
+        userId: peopleId,
+        nickName: nickName,
+        avatar: avatar,
+        type: type
+      });
       setIconFollow("user-following");
       setTextFollow("Đã theo dõi");
-    }else{
+      setCheck(true);
+    } else {
+      for (var i = 0; i < arr.length; i++) {
+        if (arr[i].userId === userId) {
+          arr.splice(i, 1);
+          for (var j = 0; j < user.following.length; j++) {
+            if (user.following[j].userId === peopleId) {
+              user.following.splice(j, 1);
+              break;
+            }
+          }
+          setIconFollow("user-follow");
+          setTextFollow("Theo dõi");
+          setCheck(false);
+          break;
+        }
+      }
+    }
+
+    setArrFollower(arr);
+    UserApi.updateInfoUser({ follower: arr }, peopleId);
+    UserApi.updateInfoUser(user, userId);
+  };
+
+  const showCommentScreen = (postId,likes) =>{
+    navigation.navigate("Comment");
+  }
+
+  const checkFollow = async (arr) => {
+    if (!check) {
       setIconFollow("user-follow");
       setTextFollow("Theo dõi");
     }
-  }
+    for (var i = 0; i < arr.length; i++) {
+      if (arr[i].userId === userId) {
+        setCheck(true);
+        setIconFollow("user-following");
+        setTextFollow("Đã theo dõi");
+        break;
+      }
+    }
+  };
 
   const getData = async () => {
     var user = await UserApi.getUserWithId(peopleId);
@@ -89,6 +126,8 @@ const PeopleProfile = ({ navigation, route }) => {
     setArrFollowing(user.following);
 
     checkFollow(user.follower);
+
+    setData(await getAllPostWithUserId(user.id));
 
     navigation.setOptions({
       title: user.nickName,
@@ -142,7 +181,8 @@ const PeopleProfile = ({ navigation, route }) => {
           <Text style={styles.text1}>{nickName}</Text>
           <View style={styles.followContainer}>
             <Text>
-              <Text style={styles.textBold}>{arrFollwer.length}</Text> người theo dõi
+              <Text style={styles.textBold}>{arrFollwer.length}</Text> người
+              theo dõi
             </Text>
             <View
               style={{
@@ -154,13 +194,17 @@ const PeopleProfile = ({ navigation, route }) => {
               }}
             />
             <Text>
-              <Text style={styles.textBold}>{arrfollowing.length}</Text> đang theo dõi
+              <Text style={styles.textBold}>{arrfollowing.length}</Text> đang
+              theo dõi
             </Text>
           </View>
         </View>
-        <TouchableOpacity style={styles.btnEditProfile} onPress={()=> followClick()}>
+        <TouchableOpacity
+          style={styles.btnEditProfile}
+          onPress={() => followClick()}
+        >
           <SimpleLineIcons name={iconFollow} size={27} color={colors.color4} />
-          <Text style={[styles.text2,{marginStart: 8}]}>{textFollow}</Text>
+          <Text style={[styles.text2, { marginStart: 8 }]}>{textFollow}</Text>
         </TouchableOpacity>
       </View>
       <View style={styles.box2}>
@@ -168,18 +212,27 @@ const PeopleProfile = ({ navigation, route }) => {
           <Text style={[styles.text1, { fontSize: 18, marginBottom: 5 }]}>
             Chi Tiết
           </Text>
-          {school.show && <LineInfo iconName="school" content={'Đã học tại ' + school.name} />}
-          {work.show && <LineInfo iconName="work" content={'Làm việc tại ' + work.name} />}
-          {address.show && <LineInfo iconName="place" content={'Đến từ ' + address.name} />}
+          {school.show && (
+            <LineInfo iconName="school" content={"Đã học tại " + school.name} />
+          )}
+          {work.show && (
+            <LineInfo iconName="work" content={"Làm việc tại " + work.name} />
+          )}
+          {address.show && (
+            <LineInfo iconName="place" content={"Đến từ " + address.name} />
+          )}
           {relationship.show && (
             <LineInfo iconName="favorite" content={relationship.name} />
           )}
-          {!school.show && !work.show && !address.show && !relationship.show && (
-            <LineInfo
-              iconName="security"
-              content={nickName + " does not share any infomation"}
-            />
-          )}
+          {!school.show &&
+            !work.show &&
+            !address.show &&
+            !relationship.show && (
+              <LineInfo
+                iconName="security"
+                content={nickName + " does not share any infomation"}
+              />
+            )}
         </View>
       </View>
       <View style={styles.box3}>
@@ -192,7 +245,14 @@ const PeopleProfile = ({ navigation, route }) => {
           Danh sách bài viết
         </Text>
         {data.map((item, index) => (
-          <Posts key={index} />
+          <Posts
+            avatar={avatar}
+            userId={peopleId}
+            nickName={nickName}
+            post={item}
+            key={index}
+            showCommentScreen={showCommentScreen}
+          />
         ))}
       </View>
     </ScrollView>

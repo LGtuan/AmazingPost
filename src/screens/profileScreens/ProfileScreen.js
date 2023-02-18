@@ -14,6 +14,7 @@ import colors from "../../colors/color";
 import Posts from "../../components/posts/Posts";
 import LineInfo from "../../components/LineInfo";
 import { getUserWithId, getUserWithPosts } from "../../api/UserApi";
+import { getAllPostWithUserId } from "../../api/PostApi";
 
 const info = {
   name: "",
@@ -41,9 +42,13 @@ const ProfileScreen = ({ stackNavigation, userId }) => {
     getData();
   }, []);
 
+  const showCommentScreen = (postId,likes) =>{
+    stackNavigation.navigate("Comment");
+  }
+
   const getData = async () => {
     setLoading(true);
-    var user = await getUserWithPosts(userId);
+    var user = await getUserWithId(userId);
     setAvatar(user.avatar);
     setBackground(user.background);
     setNickName(user.nickName);
@@ -56,7 +61,7 @@ const ProfileScreen = ({ stackNavigation, userId }) => {
     setRelationship(user.info.relationship);
     setSchool(user.info.school);
 
-    setPosts(user.posts);
+    setPosts(await getAllPostWithUserId(userId));
     setLoading(false);
   };
 
@@ -201,6 +206,7 @@ const ProfileScreen = ({ stackNavigation, userId }) => {
               nickName={nickName}
               userId={userId}
               key={index}
+              showCommentScreen={showCommentScreen}
             />
           );
         })}

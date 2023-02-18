@@ -1,4 +1,4 @@
-const url = "http://192.168.76.2:3000/posts";
+const url = "http://10.24.42.115:3000/posts";
 
 export function addPosts(post) {
   fetch(url, {
@@ -16,7 +16,14 @@ export function addPosts(post) {
 }
 
 export function getAllPost(){
-  return fetch(url + "?_expand=user&_sort=createdAt&_order=desc", {
+  return fetch(url + "?_expand=user&_expand=background&_sort=createdAt&_order=desc", {
+    method: "GET"
+  }).then((res)=> res.json())
+  .catch(e => console.log(e));
+}
+
+export function getAllPostWithUserId(userId){
+  return fetch(url + "?userId="+userId+"&_expand=background&_sort=createdAt&_order=desc", {
     method: "GET"
   }).then((res)=> res.json())
   .catch(e => console.log(e));

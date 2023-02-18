@@ -41,14 +41,12 @@ const ListPeopleScreen = ({ navigation, route }) => {
 
   const getFollowers = async () => {
     const user = await UserApi.getUserWithId(userId);
-    const follower = user.follower;
-    setData(await UserApi.getUserWithArr(follower));
+    setData(user.follower);
   };
 
   const getFollowings = async () => {
     const user = await UserApi.getUserWithId(userId);
-    const following = user.following;
-    setData(await UserApi.getUserWithArr(following));
+    setData(user.following);
   };
 
   const backAction = () => {
@@ -56,7 +54,12 @@ const ListPeopleScreen = ({ navigation, route }) => {
   };
 
   const showProfile = (index) => {
-    navigation.navigate('PeopleProfile',{peopleId: data[index].id});
+    var peopleId;
+    if(type[0]===route.params.type){
+      peopleId = data[index].id;
+    }
+    else peopleId = data[index].userId;
+    navigation.navigate('PeopleProfile',{peopleId: peopleId});
   };
 
   return (

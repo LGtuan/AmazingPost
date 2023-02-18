@@ -37,6 +37,10 @@ const HomeScreen = ({ stackNavigation, userId }) => {
     setIsLoading(false);
   };
 
+  const showCommentScreen = (postId,likes) =>{
+    stackNavigation.navigate("Comment");
+  }
+
   const createPosts = () => {
     stackNavigation.navigate("CreatePost", { userId: userId });
   };
@@ -95,6 +99,7 @@ const HomeScreen = ({ stackNavigation, userId }) => {
                   nickName={item.user.nickName}
                   post={item}
                   userId={userId}
+                  showCommentScreen={showCommentScreen}
                 />
               );
             }}

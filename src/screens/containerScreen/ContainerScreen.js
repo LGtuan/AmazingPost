@@ -18,6 +18,7 @@ import ListPeopleScreen from '../ListPeopleScreen'
 import PeopleProfile from '../PeopleProfile'
 import ChangePasswordScreen from '../ChangePasswordScreen'
 import ForgotPasswordScreen from '../ForgotPasswordScreen'
+import CommentScreen from '../CommentScreen'
 
 const Stack = createNativeStackNavigator();
 
@@ -39,6 +40,7 @@ const FormScreen = () => {
                     <Stack.Screen name='PeopleProfile' options={{title:""}} component={PeopleProfile}/>
                     <Stack.Screen name='ChangePassword' options={{headerShown: false}} component={ChangePasswordScreen}/>
                     <Stack.Screen name='ForgotPassword' options={{headerShown: false}} component={ForgotPasswordScreen}/>
+                    <Stack.Screen name='Comment'  options={{headerShown: false}} component={CommentScreen}/>
                 </Stack.Navigator>
             </View>
         </NavigationContainer>

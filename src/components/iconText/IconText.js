@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 import styles from './style'
 import colors from '../../colors/color'
 
-const IconText = ({ text, status, src, src2 }) => {
+const IconText = ({ text, status, src, src2, onPress }) => {
 
   const [isActive, setActive] = useState(false);
 
