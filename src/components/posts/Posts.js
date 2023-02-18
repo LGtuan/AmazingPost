@@ -21,6 +21,7 @@ const Posts = ({
   const background = post.background;
   const img = post.img;
   const likes = post.likes;
+  const commentCount = post.commentCount;
 
   useEffect(() => {
     checkLike();
@@ -143,7 +144,7 @@ const Posts = ({
               />
               <IconText
                 src={require("../../images/comment.png")}
-                text="68"
+                text={commentCount}
                 status="small"
                 src2=""
               />
@@ -174,7 +175,7 @@ const Posts = ({
               status="medium"
               src={require("../../images/comment.png")}
               onPress={() => {
-                showCommentScreen(post.id, likes);
+                showCommentScreen(post.id, likes,commentCount);
               }}
             />
             <IconText

@@ -1,19 +1,62 @@
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import React from "react";
+import {
+  FlatList,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import React, { useEffect, useState } from "react";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import IconText from "../components/iconText/IconText";
+import colors from "../colors/color";
+import { getPostWithId, updatePost } from "../api/PostApi";
+import { getUserWithId } from "../api/UserApi";
+import { addComment, getAllCommentWithPostId } from "../api/CommentApi";
+import CommentItem from "../components/CommentItem";
 
 const CommentScreen = ({ navigation, route }) => {
   const likes = route.params.likes;
   const postId = route.params.postId;
   const userId = route.params.userId;
 
+  const [content, setContent] = useState("");
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    getData();
+  }, []);
+
+  const getData = async () => {
+    setData(await getAllCommentWithPostId(postId));
+  };
+
   const showLikeScreen = () => {
-    navigation.navigate("Like", {
+    navigation.push("Like", {
       postId: postId,
       likes: likes,
       userId: userId,
     });
+  };
+
+  const sendComment = async () => {
+    const commentCount = (await getPostWithId(postId)).commentCount;    
+    updatePost(postId, { commentCount: commentCount+1 });
+
+    const user = await getUserWithId(userId);
+
+    const comment = {
+      userId: userId,
+      postId: postId,
+      avatar: user.avatar,
+      nickName: user.nickName,
+      content: content,
+    };
+
+    data.unshift(comment);
+
+    addComment(comment);
+    setContent("");
   };
 
   return (
@@ -36,7 +79,39 @@ const CommentScreen = ({ navigation, route }) => {
           />
         </TouchableOpacity>
       </View>
-      <View style={styles.body}></View>
+      <View style={styles.body}>
+        <FlatList
+          data={data}
+          contentContainerStyle={{ paddingBottom: 50 }}
+          showsVerticalScrollIndicator={false}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item, index }) => (
+            <CommentItem
+              avatar={item.avatar}
+              content={item.content}
+              nickName={item.nickName}
+            />
+          )}
+        />
+      </View>
+      <View style={styles.footer}>
+        <TextInput
+          style={styles.input}
+          placeholder="Write your comment"
+          cursorColor="gray"
+          autoFocus
+          value={content}
+          onChangeText={setContent}
+          multiline
+        />
+        <TouchableOpacity disabled={content === ""} onPress={sendComment}>
+          <MaterialIcons
+            name="send"
+            size={30}
+            color={content === "" ? colors.color6 : colors.color4}
+          />
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -64,5 +139,27 @@ const styles = StyleSheet.create({
     fontFamily: "AndikaNewBasic",
     paddingBottom: 7,
     paddingStart: 8,
+  },
+  footer: {
+    position: "absolute",
+    width: "100%",
+    height: 58,
+    bottom: 0,
+    borderTopWidth: 1,
+    borderTopColor: "#aaaaaa",
+    paddingHorizontal: 10,
+    justifyContent: "space-between",
+    paddingBottom: 2,
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "white",
+  },
+  input: {
+    width: "90%",
+    height: 43,
+    borderRadius: 20,
+    paddingHorizontal: 12,
+    backgroundColor: colors.color6,
+    fontSize: 16,
   },
 });

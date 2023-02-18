@@ -42,11 +42,12 @@ const ProfileScreen = ({ stackNavigation, userId }) => {
     getData();
   }, []);
 
-  const showCommentScreen = (postId, likes) => {
-    stackNavigation.navigate("Comment", {
+  const showCommentScreen = (postId, likes, commentCount) => {
+    stackNavigation.push("Comment", {
       postId: postId,
       likes: likes,
       userId: userId,
+      commentCount: commentCount
     });
   };
 

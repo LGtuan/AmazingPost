@@ -39,11 +39,12 @@ const HomeScreen = ({ stackNavigation, userId }) => {
     setIsLoading(false);
   };
 
-  const showCommentScreen = (postId, likes) => {
-    stackNavigation.navigate("Comment", {
+  const showCommentScreen = (postId, likes, commentCount) => {
+    stackNavigation.push("Comment", {
       postId: postId,
       likes: likes,
       userId: userId,
+      commentCount: commentCount
     });
   };
 
@@ -57,7 +58,7 @@ const HomeScreen = ({ stackNavigation, userId }) => {
 
   const showProfilePeople = (peopleId, userId) => {
     if (peopleId !== userId) {
-      stackNavigation.navigate("PeopleProfile", { peopleId: peopleId });
+      stackNavigation.push("PeopleProfile", { peopleId: peopleId });
     }
   };
 

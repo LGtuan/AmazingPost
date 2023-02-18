@@ -91,11 +91,12 @@ const PeopleProfile = ({ navigation, route }) => {
     UserApi.updateInfoUser(user, userId);
   };
 
-  const showCommentScreen = (postId, likes) => {
-    navigation.navigate("Comment", {
+  const showCommentScreen = (postId, likes,commentCount) => {
+    navigation.push("Comment", {
       postId: postId,
       likes: likes,
       userId: userId,
+      commentCount: commentCount
     });
   };
 

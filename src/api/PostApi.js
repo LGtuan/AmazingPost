@@ -8,8 +8,8 @@ export function addPosts(post) {
     },
     body: JSON.stringify(post),
   })
-    .then((res) => res.json())
-    .then((json) => console.log(json))
+    // .then((res) => res.json())
+    // .then((json) => console.log(json))
     .catch((e) => {
       console.log(e);
     });
@@ -37,9 +37,12 @@ export function updatePost(postId,post){
     },
     body: JSON.stringify(post),
   })
-    .then((res) => res.json())
-    .then((json) => {
-      console.log(json);
-    })
     .catch((e) => console.log(e));
+}
+
+export function getPostWithId(postId){
+  return fetch(url + "/"+postId, {
+    method: "GET"
+  }).then((res)=> res.json())
+  .catch(e => console.log(e));
 }

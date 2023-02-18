@@ -67,6 +67,7 @@ const CreatePostsScreen = ({ navigation, route }) => {
       content: content,
       img: currentImg,
       backgroundId: currentBg.id,
+      commentCount: 0,
       likes: []
     };
     addPosts(post);
