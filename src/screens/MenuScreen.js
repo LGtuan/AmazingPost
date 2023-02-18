@@ -13,24 +13,24 @@ const MenuScreen = ({ stackNavigation, userId }) => {
   const [type, setType] = useState("");
 
   const switchToListPeople = (type) => {
-    stackNavigation.navigate('ListPeople',{userId: userId, type: type})
-  }
+    stackNavigation.navigate("ListPeople", { userId: userId, type: type });
+  };
 
   const switchToCreatePostsScreen = () => {
-    stackNavigation.navigate('CreatePost',{userId: userId});
-  }
+    stackNavigation.navigate("CreatePost", { userId: userId });
+  };
 
   const switchToChangePassScreen = () => {
-    stackNavigation.navigate('ChangePassword',{userId: userId});
-  }
+    stackNavigation.navigate("ChangePassword", { userId: userId });
+  };
 
   const switchToForgortPassword = () => {
-    stackNavigation.navigate('ForgotPassword');
-  }
+    stackNavigation.navigate("ForgotPassword");
+  };
 
   const logout = () => {
     stackNavigation.popToTop();
-  }
+  };
 
   useEffect(() => {
     getData();
@@ -65,25 +65,50 @@ const MenuScreen = ({ stackNavigation, userId }) => {
           <View style={{ width: "100%" }}>
             <Text style={styles.text2}>Tất cả lối tắt</Text>
           </View>
-          {shadowButton(require('../images/icon_follower.png'),'Người theo dõi',()=> switchToListPeople('follower'))}
-          {shadowButton(require('../images/icon_follower.png'),'Đang theo dõi',() => switchToListPeople('following'))}
-          {shadowButton(require('../images/edit_posts.png'),"Bài đăng",switchToCreatePostsScreen)}
-          <View style={{ width: "100%", marginTop:10 }}>
+          {shadowButton(
+            require("../images/icon_follower.png"),
+            "Người theo dõi",
+            () => switchToListPeople("follower")
+          )}
+          {shadowButton(
+            require("../images/icon_follower.png"),
+            "Đang theo dõi",
+            () => switchToListPeople("following")
+          )}
+          {type === "admin" &&
+            shadowButton(
+              require("../images/edit_posts.png"),
+              "Bài đăng",
+              switchToCreatePostsScreen
+            )}
+          <View style={{ width: "100%", marginTop: 10 }}>
             <Text style={styles.text2}>Cài đặt</Text>
           </View>
-          {shadowButton(require('../images/padlock.png'),"Thay đổi mật khẩu",switchToChangePassScreen)}
-          {shadowButton(require('../images/forgort.png'),"Quên mật khẩu",switchToForgortPassword)}
-          {shadowButton(require('../images/logout.png'),"Đăng xuất",logout)}
+          {shadowButton(
+            require("../images/padlock.png"),
+            "Thay đổi mật khẩu",
+            switchToChangePassScreen
+          )}
+          {shadowButton(
+            require("../images/forgort.png"),
+            "Quên mật khẩu",
+            switchToForgortPassword
+          )}
+          {shadowButton(require("../images/logout.png"), "Đăng xuất", logout)}
         </View>
       </View>
     </View>
   );
 };
 
-function shadowButton(source,title,onPress) {
+function shadowButton(source, title, onPress) {
   return (
-    <TouchableOpacity activeOpacity={0.6} onPress={onPress} style={styles.shadowButton}>
-      <Image source={source}/>
+    <TouchableOpacity
+      activeOpacity={0.6}
+      onPress={onPress}
+      style={styles.shadowButton}
+    >
+      <Image source={source} />
       <Text style={styles.text3}>{title}</Text>
     </TouchableOpacity>
   );
@@ -101,7 +126,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     flexDirection: "row",
     alignItems: "center",
-    paddingHorizontal: 10
+    paddingHorizontal: 10,
   },
   text1: {
     fontSize: 28,
@@ -126,17 +151,16 @@ const styles = StyleSheet.create({
   body: {
     width: "100%",
     alignItems: "center",
-
   },
   box2: {
     width: "95%",
     paddingTop: 10,
-    flexWrap: 'wrap',
-    flexDirection: 'row',
+    flexWrap: "wrap",
+    flexDirection: "row",
   },
   shadowButton: {
     width: "47%",
-    backgroundColor :'white',
+    backgroundColor: "white",
     shadowColor: "#000",
     shadowOffset: {
       width: 1,
@@ -146,10 +170,10 @@ const styles = StyleSheet.create({
     shadowRadius: 4.65,
 
     elevation: 6,
-    justifyContent: 'center',
+    justifyContent: "center",
     height: 65,
     borderRadius: 6,
     paddingStart: 20,
-    margin: 5
+    margin: 5,
   },
 });

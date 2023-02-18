@@ -26,7 +26,7 @@ const info = {
 const PeopleProfile = ({ navigation, route }) => {
   const peopleId = route.params.peopleId;
 
-  const [data,setData] = useState([]);
+  const [data, setData] = useState([]);
   const [avatar, setAvatar] = useState("");
   const [background, setBackground] = useState("");
   const [nickName, setNickName] = useState("");
@@ -57,13 +57,13 @@ const PeopleProfile = ({ navigation, route }) => {
         userId: userId,
         nickName: user.nickName,
         avatar: user.avatar,
-        type: user.type
+        type: user.type,
       });
       user.following.push({
         userId: peopleId,
         nickName: nickName,
         avatar: avatar,
-        type: type
+        type: type,
       });
       setIconFollow("user-following");
       setTextFollow("Đã theo dõi");
@@ -91,9 +91,13 @@ const PeopleProfile = ({ navigation, route }) => {
     UserApi.updateInfoUser(user, userId);
   };
 
-  const showCommentScreen = (postId,likes) =>{
-    navigation.navigate("Comment",{postId: postId,likes: likes});
-  }
+  const showCommentScreen = (postId, likes) => {
+    navigation.navigate("Comment", {
+      postId: postId,
+      likes: likes,
+      userId: userId,
+    });
+  };
 
   const checkFollow = async (arr) => {
     if (!check) {
@@ -247,12 +251,11 @@ const PeopleProfile = ({ navigation, route }) => {
         {data.map((item, index) => (
           <Posts
             avatar={avatar}
-            userId={peopleId}
+            userId={userId}
             nickName={nickName}
             post={item}
             key={index}
             showCommentScreen={showCommentScreen}
-            type={type}
           />
         ))}
       </View>

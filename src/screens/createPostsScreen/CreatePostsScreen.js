@@ -61,12 +61,13 @@ const CreatePostsScreen = ({ navigation, route }) => {
     return true;
   };
 
-  const post = async () => {
+  const post = () => {
     const post = {
       userId: userId,
       content: content,
       img: currentImg,
       backgroundId: currentBg.id,
+      likes: []
     };
     addPosts(post);
 

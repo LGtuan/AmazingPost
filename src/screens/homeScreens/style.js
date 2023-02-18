@@ -22,11 +22,11 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         paddingEnd: 10,
+        paddingBottom: 10
     },
     header2: {
         flexDirection: 'row',
         paddingBottom: 5,
-        paddingTop: 8,
     },
     imgHeader: {
         width: 36,

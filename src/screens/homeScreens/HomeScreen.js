@@ -24,7 +24,7 @@ const HomeScreen = ({ stackNavigation, userId }) => {
   const [isLoading, setIsLoading] = useState();
   const [posts, setPosts] = useState([]);
   const [avatar, setAvatar] = useState("");
-  const [type,setType] = useState("user");
+  const [type, setType] = useState("user");
 
   useEffect(() => {
     getData();
@@ -34,14 +34,18 @@ const HomeScreen = ({ stackNavigation, userId }) => {
     setIsLoading(true);
     const user = await getUserWithId(userId);
     setAvatar(user.avatar);
-    setType(user.type)
+    setType(user.type);
     setPosts(await getAllPost());
     setIsLoading(false);
   };
 
-  const showCommentScreen = (postId,likes) =>{
-    stackNavigation.navigate("Comment",{postId: postId,likes: likes});
-  }
+  const showCommentScreen = (postId, likes) => {
+    stackNavigation.navigate("Comment", {
+      postId: postId,
+      likes: likes,
+      userId: userId,
+    });
+  };
 
   const createPosts = () => {
     stackNavigation.navigate("CreatePost", { userId: userId });
@@ -49,6 +53,12 @@ const HomeScreen = ({ stackNavigation, userId }) => {
 
   const search = () => {
     stackNavigation.navigate("Search", { userId: userId });
+  };
+
+  const showProfilePeople = (peopleId, userId) => {
+    if (peopleId !== userId) {
+      stackNavigation.navigate("PeopleProfile", { peopleId: peopleId });
+    }
   };
 
   return (
@@ -67,19 +77,23 @@ const HomeScreen = ({ stackNavigation, userId }) => {
               </TouchableOpacity>
             </View>
           </View>
-          <View style={styles.header2}>
-            <Image
-              source={
-                avatar === ""
-                  ? require("../../images/avatarDefault.png")
-                  : { uri: avatar }
-              }
-              style={styles.imgHeader}
-            />
-            <TouchableOpacity onPress={createPosts} style={styles.btnPosts}>
-              <Text style={styles.label}>What are you thinking?</Text>
-            </TouchableOpacity>
-          </View>
+          {type === "admin" ? (
+            <View style={styles.header2}>
+              <Image
+                source={
+                  avatar === ""
+                    ? require("../../images/avatarDefault.png")
+                    : { uri: avatar }
+                }
+                style={styles.imgHeader}
+              />
+              <TouchableOpacity onPress={createPosts} style={styles.btnPosts}>
+                <Text style={styles.label}>What are you thinking?</Text>
+              </TouchableOpacity>
+            </View>
+          ) : (
+            <></>
+          )}
         </View>
         <View style={styles.body}>
           <FlatList
@@ -87,7 +101,7 @@ const HomeScreen = ({ stackNavigation, userId }) => {
               <RefreshControl
                 refreshing={isLoading}
                 onRefresh={() => {
-                 getData();
+                  getData();
                 }}
               />
             }
@@ -102,7 +116,9 @@ const HomeScreen = ({ stackNavigation, userId }) => {
                   post={item}
                   userId={userId}
                   showCommentScreen={showCommentScreen}
-                  type={type}
+                  showProfilePeople={() => {
+                    showProfilePeople(item.userId, userId);
+                  }}
                 />
               );
             }}

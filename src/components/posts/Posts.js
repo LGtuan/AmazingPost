@@ -7,8 +7,16 @@ import styles from "./style";
 import colors from "../../colors/color";
 import IconText from "../iconText/IconText";
 import { updatePost } from "../../api/PostApi";
+import { getUserWithId } from "../../api/UserApi";
 
-const Posts = ({ userId, avatar, nickName, post, showCommentScreen, type }) => {
+const Posts = ({
+  userId,
+  avatar,
+  nickName,
+  post,
+  showCommentScreen,
+  showProfilePeople,
+}) => {
   const [isLike, setLike] = useState(false);
   const background = post.background;
   const img = post.img;
@@ -16,12 +24,7 @@ const Posts = ({ userId, avatar, nickName, post, showCommentScreen, type }) => {
 
   useEffect(() => {
     checkLike();
-  }, []);
-
-  const showProfilePeople = () => {
-    if (userId !== post.userId) {
-    }
-  };
+  });
 
   const checkLike = () => {
     for (let i = 0; i < likes.length; i++) {
@@ -33,7 +36,8 @@ const Posts = ({ userId, avatar, nickName, post, showCommentScreen, type }) => {
     setLike(false);
   };
 
-  const likeClick = () => {
+  const likeClick = async () => {
+    const user = await getUserWithId(userId);
     let check = false;
     for (let i = 0; i < likes.length; i++) {
       if (likes[i].userId === userId) {
@@ -46,9 +50,9 @@ const Posts = ({ userId, avatar, nickName, post, showCommentScreen, type }) => {
     if (!check) {
       likes.push({
         userId: userId,
-        avatar: avatar,
-        nickName: nickName,
-        type: type,
+        avatar: user.avatar,
+        nickName: user.nickName,
+        type: user.type,
       });
       setLike(true);
     }
@@ -59,14 +63,20 @@ const Posts = ({ userId, avatar, nickName, post, showCommentScreen, type }) => {
     <View style={styles.wrapper}>
       <View style={styles.container}>
         <View style={styles.header}>
-          <Image
-            style={styles.avatar}
-            source={
-              avatar === ""
-                ? require("../../images/avatarDefault.png")
-                : { uri: avatar }
-            }
-          />
+          <TouchableOpacity
+            activeOpacity={0.7}
+            onPress={showProfilePeople}
+            style={{ borderRadius: 25 }}
+          >
+            <Image
+              style={styles.avatar}
+              source={
+                avatar === ""
+                  ? require("../../images/avatarDefault.png")
+                  : { uri: avatar }
+              }
+            />
+          </TouchableOpacity>
           <View style={styles.viewInfo}>
             <Text style={styles.label1}>{nickName}</Text>
             <Text>2hrs</Text>

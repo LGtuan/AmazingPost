@@ -6,10 +6,15 @@ import IconText from "../components/iconText/IconText";
 const CommentScreen = ({ navigation, route }) => {
   const likes = route.params.likes;
   const postId = route.params.postId;
+  const userId = route.params.userId;
 
-  const showLikeScreen = () =>{
-    navigation.navigate("Like",{postId: postId,likes: likes})
-  }
+  const showLikeScreen = () => {
+    navigation.navigate("Like", {
+      postId: postId,
+      likes: likes,
+      userId: userId,
+    });
+  };
 
   return (
     <View style={styles.container}>

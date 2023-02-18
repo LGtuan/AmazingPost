@@ -22,7 +22,7 @@ const info = {
 };
 
 const ProfileScreen = ({ stackNavigation, userId }) => {
-  const [isLoading,setLoading] = useState(true);
+  const [isLoading, setLoading] = useState(true);
 
   const [avatar, setAvatar] = useState("");
   const [background, setBackground] = useState("");
@@ -42,9 +42,13 @@ const ProfileScreen = ({ stackNavigation, userId }) => {
     getData();
   }, []);
 
-  const showCommentScreen = (postId,likes) =>{
-    stackNavigation.navigate("Comment",{postId: postId,likes: likes});
-  }
+  const showCommentScreen = (postId, likes) => {
+    stackNavigation.navigate("Comment", {
+      postId: postId,
+      likes: likes,
+      userId: userId,
+    });
+  };
 
   const getData = async () => {
     setLoading(true);
@@ -207,7 +211,6 @@ const ProfileScreen = ({ stackNavigation, userId }) => {
               userId={userId}
               key={index}
               showCommentScreen={showCommentScreen}
-              type={type}
             />
           );
         })}

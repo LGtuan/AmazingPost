@@ -9,9 +9,17 @@ import React from "react";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import IconText from "../components/iconText/IconText";
 import PeopleLine from "../components/PeopleLine";
+import colors from "../colors/color";
 
 const LikeScreen = ({ navigation, route }) => {
   const likes = route.params.likes;
+  const userId = route.params.userId;
+
+  const showProfilePeople = (peopleId) => {
+    if (peopleId !== userId) {
+      navigation.push("PeopleProfile", { peopleId: peopleId });
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -34,15 +42,42 @@ const LikeScreen = ({ navigation, route }) => {
       </View>
       <View style={styles.body}>
         <FlatList
-          contentContainerStyle={{ flex: 1,paddingHorizontal: 6}}
+          contentContainerStyle={{ flex: 1, paddingHorizontal: 6 }}
           data={likes}
           renderItem={({ item, index }) => (
+            <View>
+              <View
+                style={{
+                  position: "absolute",
+                  zIndex: 2,
+                  left: 47,
+                  bottom: 5,
+                  padding: 2,
+                  backgroundColor: "white",
+                  borderRadius: 20,
+                }}
+              >
+                <MaterialIcons
+                  name="thumb-up"
+                  style={{
+                    backgroundColor: colors.color4,
+                    padding: 4,
+                    borderRadius: 15,
+                  }}
+                  size={15}
+                  color={colors.white}
+                />
+              </View>
               <PeopleLine
                 source={{ uri: item.avatar }}
                 text={item.nickName}
                 size={60}
                 type={item.type}
+                onPress={()=>{
+                  showProfilePeople(item.userId);
+                }}
               />
+            </View>
           )}
         />
       </View>
