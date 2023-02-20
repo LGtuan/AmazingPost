@@ -9,6 +9,10 @@ import IconText from "../iconText/IconText";
 import { updatePost } from "../../api/PostApi";
 import { getUserWithId } from "../../api/UserApi";
 
+const timeOneMinute = 60*1000;
+const timeOneHours = timeOneMinute * 60;
+const timeOneDay = timeOneHours * 24;
+
 const Posts = ({
   userId,
   avatar,
@@ -18,14 +22,40 @@ const Posts = ({
   showProfilePeople,
 }) => {
   const [isLike, setLike] = useState(false);
+  const [timeString,setTimeString] = useState("");
   const background = post.background;
   const img = post.img;
   const likes = post.likes;
   const commentCount = post.commentCount;
+  const createAt = post.createdAt;
+
+  const date = new Date(createAt);
+  const nowDate = new Date();
 
   useEffect(() => {
     checkLike();
-  });
+    checkDate();
+  },[post]);
+
+  const checkDate = () =>{
+    let time = nowDate - date;
+    let string = ""
+    if(time < timeOneMinute){
+      string = "now";
+    }else if(time < timeOneHours){
+      let minute = Math.round(time / timeOneMinute);
+      string = minute+"m ago"
+    }else if(time < timeOneDay){
+      let hour = Math.round(time / timeOneHours);
+      string = hour+"h ago"
+    }else if(time < timeOneDay*3){
+      let day = Math.round(time / timeOneDay);
+      string = day+"d ago"
+    }else{
+      string = date.getDate()+"-"+date.getMonth()+"-"+date.getFullYear();
+    }
+    setTimeString(string)
+  }
 
   const checkLike = () => {
     for (let i = 0; i < likes.length; i++) {
@@ -80,7 +110,7 @@ const Posts = ({
           </TouchableOpacity>
           <View style={styles.viewInfo}>
             <Text style={styles.label1}>{nickName}</Text>
-            <Text>2hrs</Text>
+            <Text>{timeString}</Text>
           </View>
         </View>
         <View style={styles.content}>
@@ -150,7 +180,7 @@ const Posts = ({
               />
               <IconText
                 src={require("../../images/share2.png")}
-                text="12"
+                text={post.share}
                 status="small"
                 src2=""
               />

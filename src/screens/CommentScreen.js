@@ -87,6 +87,7 @@ const CommentScreen = ({ navigation, route }) => {
           keyExtractor={(item) => item.id}
           renderItem={({ item, index }) => (
             <CommentItem
+            key={item.id}
               avatar={item.avatar}
               content={item.content}
               nickName={item.nickName}
