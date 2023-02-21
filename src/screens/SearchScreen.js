@@ -26,7 +26,8 @@ const SearchScreen = ({ navigation, route }) => {
     navigation.navigate("ListPeople", {
       userId: userId,
       text: textSearch,
-      type: 'search'
+      type: "search",
+      userType: route.params.type,
     });
   };
 
@@ -43,9 +44,9 @@ const SearchScreen = ({ navigation, route }) => {
       var arr = data;
       if (arr.includes(text)) {
         var index = arr.indexOf(text);
-        arr.splice(index,1);
-        arr = [text,...arr]
-      }else arr = [text,...arr];
+        arr.splice(index, 1);
+        arr = [text, ...arr];
+      } else arr = [text, ...arr];
       await AsyncStorage.setItem("searchData" + userId, JSON.stringify(arr));
       setData(arr);
     }
@@ -64,7 +65,9 @@ const SearchScreen = ({ navigation, route }) => {
 
   const historyComponent = (index, text) => {
     return (
-      <View style={{ flexDirection: "row", alignItems: "center" , width: '100%'}}>
+      <View
+        style={{ flexDirection: "row", alignItems: "center", width: "100%" }}
+      >
         <PeopleLine
           onPress={() => showListSearch(text)}
           source={require("../images/history.png")}
@@ -76,7 +79,7 @@ const SearchScreen = ({ navigation, route }) => {
           onPress={() => {
             remove(index);
           }}
-          style={{position: 'absolute',right: 5,top: 15}}
+          style={{ position: "absolute", right: 5, top: 15 }}
         >
           <MaterialIcons name="clear" size={30} color={colors.color7} />
         </TouchableOpacity>

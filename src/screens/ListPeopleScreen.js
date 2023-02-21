@@ -6,12 +6,15 @@ import PeopleLine from "../components/PeopleLine";
 
 const UserApi = require("../api/UserApi");
 
+let userType = "user";
+
 const ListPeopleScreen = ({ navigation, route }) => {
   const userId = route.params.userId;
   const type = ["search", "friend", "follower", "following"];
   const [title, setTitle] = useState("");
   const [iconName, setIconName] = useState("");
   const [data, setData] = useState([]);
+  userType = route.params.userType;
 
   useEffect(() => {
     if (type[0] === route.params.type) {
@@ -59,7 +62,7 @@ const ListPeopleScreen = ({ navigation, route }) => {
       peopleId = data[index].id;
     }
     else peopleId = data[index].userId;
-    navigation.navigate('PeopleProfile',{peopleId: peopleId});
+    navigation.navigate('PeopleProfile',{peopleId: peopleId,userType: userType});
   };
 
   return (

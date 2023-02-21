@@ -17,7 +17,10 @@ const LikeScreen = ({ navigation, route }) => {
 
   const showProfilePeople = (peopleId) => {
     if (peopleId !== userId) {
-      navigation.push("PeopleProfile", { peopleId: peopleId });
+      navigation.push("PeopleProfile", {
+        peopleId: peopleId,
+        userType: route.params.type,
+      });
     }
   };
 
@@ -73,7 +76,7 @@ const LikeScreen = ({ navigation, route }) => {
                 text={item.nickName}
                 size={60}
                 type={item.type}
-                onPress={()=>{
+                onPress={() => {
                   showProfilePeople(item.userId);
                 }}
               />

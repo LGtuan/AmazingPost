@@ -44,7 +44,7 @@ const HomeScreen = ({ stackNavigation, userId }) => {
       postId: postId,
       likes: likes,
       userId: userId,
-      commentCount: commentCount
+      type: type
     });
   };
 
@@ -53,7 +53,7 @@ const HomeScreen = ({ stackNavigation, userId }) => {
   };
 
   const search = () => {
-    stackNavigation.navigate("Search", { userId: userId });
+    stackNavigation.navigate("Search", { userId: userId,type: type });
   };
 
   const showProfilePeople = (peopleId, userId) => {

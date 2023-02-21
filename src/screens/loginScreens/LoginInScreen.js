@@ -1,4 +1,11 @@
-import { View, Text, TouchableOpacity, Image, TextInput } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Image,
+  TextInput,
+  Alert,
+} from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -41,21 +48,21 @@ const LoginInScreen = ({ navigation }) => {
     }
   };
 
-  const saveAccount = async ()=>{
-    try{
-        var account;
-        if(remember){
-            account = {phone: phone, password: password,remember: remember};
-            await AsyncStorage.setItem("account",JSON.stringify(account));
-            // console.log("save success");
-        }else{
-            await AsyncStorage.removeItem("account");
-            // console.log('delete success');
-        }
-    }catch(e){
-        console.log(e)
+  const saveAccount = async () => {
+    try {
+      var account;
+      if (remember) {
+        account = { phone: phone, password: password, remember: remember };
+        await AsyncStorage.setItem("account", JSON.stringify(account));
+        // console.log("save success");
+      } else {
+        await AsyncStorage.removeItem("account");
+        // console.log('delete success');
+      }
+    } catch (e) {
+      console.log(e);
     }
-  }
+  };
 
   const checkLogin = async () => {
     var user = await UserApi.getUserWithPhone(phone);
@@ -64,8 +71,16 @@ const LoginInScreen = ({ navigation }) => {
       return false;
     }
     setError("");
-    saveAccount();
-    showMainScreen(user.id);
+    if (user.isLock) {
+      Alert.alert(
+        "Your account were locked.",
+        "Contact admin Lê Gia Tuấn to unlock",
+        [{ text: "OK", style: "cancel" }]
+      );
+    } else {
+      saveAccount();
+      showMainScreen(user.id);
+    }
   };
 
   const showSignUpScreen = () => {
@@ -73,7 +88,7 @@ const LoginInScreen = ({ navigation }) => {
   };
 
   const showMainScreen = (id) => {
-    navigation.navigate("Main",{idUser: id});
+    navigation.navigate("Main", { idUser: id });
   };
 
   return (
@@ -105,8 +120,18 @@ const LoginInScreen = ({ navigation }) => {
           value={password}
           onTextChange={setPassword}
         />
-        <View style={{flexDirection: 'row',justifyContent: 'space-between',alignItems: 'center'}}>
-          <CustomCheckBox value={remember} text='Remember' onChange={setRemember}/>
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          <CustomCheckBox
+            value={remember}
+            text="Remember"
+            onChange={setRemember}
+          />
           <Text style={styles.forgotPass}>Forgot password ?</Text>
         </View>
         <CustomButton text={"Sign In"} onPress={checkLogin} />

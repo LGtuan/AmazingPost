@@ -38,7 +38,7 @@ const FormScreen = () => {
                     <Stack.Screen name='EditProfileDetails' options={{title: 'Profile details'}} component={EditProfileDetails}/>
                     <Stack.Screen name='Search' component={SearchScreen} options={{headerShown: false}}/>
                     <Stack.Screen name='ListPeople' options={{headerShown: false}} component={ListPeopleScreen}/>
-                    <Stack.Screen name='PeopleProfile' options={{title:""}} component={PeopleProfile}/>
+                    <Stack.Screen name='PeopleProfile' options={{headerShown: false}} component={PeopleProfile}/>
                     <Stack.Screen name='ChangePassword' options={{headerShown: false}} component={ChangePasswordScreen}/>
                     <Stack.Screen name='ForgotPassword' options={{headerShown: false}} component={ForgotPasswordScreen}/>
                     <Stack.Screen name='Comment'  options={{headerShown: false}} component={CommentScreen}/>

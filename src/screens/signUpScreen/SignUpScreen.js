@@ -55,6 +55,7 @@ const SignUpScreen = ({ navigation }) => {
         relationship: infomation,
         work: infomation,
       },
+      isLock: false
     }
 
     await UserApi.addUser(user);

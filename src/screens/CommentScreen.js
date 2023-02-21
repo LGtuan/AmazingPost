@@ -31,17 +31,24 @@ const CommentScreen = ({ navigation, route }) => {
     setData(await getAllCommentWithPostId(postId));
   };
 
+  const showProfilePeople = (peopleId, userId) => {
+    if (peopleId !== userId) {
+      navigation.push("PeopleProfile", { peopleId: peopleId,userType: route.params.type });
+    }
+  };
+
   const showLikeScreen = () => {
     navigation.push("Like", {
       postId: postId,
       likes: likes,
       userId: userId,
+      type: route.params.type
     });
   };
 
   const sendComment = async () => {
-    const commentCount = (await getPostWithId(postId)).commentCount;    
-    updatePost(postId, { commentCount: commentCount+1 });
+    const commentCount = (await getPostWithId(postId)).commentCount;
+    updatePost(postId, { commentCount: commentCount + 1 });
 
     const user = await getUserWithId(userId);
 
@@ -85,12 +92,15 @@ const CommentScreen = ({ navigation, route }) => {
           contentContainerStyle={{ paddingBottom: 50 }}
           showsVerticalScrollIndicator={false}
           keyExtractor={(item) => item.id}
-          renderItem={({ item, index }) => (
+          renderItem={({ item }) => (
             <CommentItem
-            key={item.id}
+              key={item.id}
               avatar={item.avatar}
               content={item.content}
               nickName={item.nickName}
+              onPress={()=>{
+                showProfilePeople(item.userId,userId);
+              }}
             />
           )}
         />

@@ -12,8 +12,12 @@ const MenuScreen = ({ stackNavigation, userId }) => {
   const [nickName, setNickName] = useState("");
   const [type, setType] = useState("");
 
-  const switchToListPeople = (type) => {
-    stackNavigation.navigate("ListPeople", { userId: userId, type: type });
+  const switchToListPeople = (typeList) => {
+    stackNavigation.navigate("ListPeople", {
+      userId: userId,
+      type: typeList,
+      userType: type,
+    });
   };
 
   const switchToCreatePostsScreen = () => {

@@ -5,6 +5,7 @@ import {
   Image,
   TouchableOpacity,
   StyleSheet,
+  Alert,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import LineInfo from "../components/LineInfo";
@@ -41,12 +42,18 @@ const PeopleProfile = ({ navigation, route }) => {
   const [work, setWork] = useState(info);
   const [relationship, setRelationship] = useState(info);
 
+  const [isLock, setLock] = useState(true);
+
   const [iconFollow, setIconFollow] = useState("user-follow");
   const [textFollow, setTextFollow] = useState("Theo dõi");
 
   useEffect(() => {
     getData();
   }, []);
+
+  const backAction = () => {
+    navigation.goBack();
+  };
 
   const followClick = async () => {
     const arr = arrFollwer;
@@ -91,12 +98,12 @@ const PeopleProfile = ({ navigation, route }) => {
     UserApi.updateInfoUser(user, userId);
   };
 
-  const showCommentScreen = (postId, likes,commentCount) => {
+  const showCommentScreen = (postId, likes, commentCount) => {
     navigation.push("Comment", {
       postId: postId,
       likes: likes,
       userId: userId,
-      commentCount: commentCount
+      commentCount: commentCount,
     });
   };
 
@@ -114,6 +121,42 @@ const PeopleProfile = ({ navigation, route }) => {
       }
     }
   };
+
+  const lockClick = () => {
+    if(!isLock){
+      Alert.alert("Do you want lock this account?","",[
+        {
+          text: "Yes",
+          onPress:lock,
+        },
+        {
+          text: "No",
+          style: "cancel"
+        }
+      ])
+    }else{
+      Alert.alert("Do you want unlock this account?","",[
+        {
+          text: "Yes",
+          onPress:unLock,
+        },
+        {
+          text: "No",
+          style: "cancel"
+        }
+      ])
+    }
+  }
+
+  const lock = () =>{
+    setLock(true)
+    UserApi.updateInfoUser({isLock: true},peopleId);
+  }
+
+  const unLock = () =>{
+    setLock(false);
+    UserApi.updateInfoUser({isLock: false},peopleId);
+  }
 
   const getData = async () => {
     var user = await UserApi.getUserWithId(peopleId);
@@ -134,133 +177,177 @@ const PeopleProfile = ({ navigation, route }) => {
 
     setData(await getAllPostWithUserId(user.id));
 
-    navigation.setOptions({
-      title: user.nickName,
-    });
+    setLock(user.isLock);
   };
 
   return (
-    <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
-      <View style={styles.box1}>
-        <View style={styles.images}>
-          <Image
-            source={background === "" ? "gray" : { uri: background }}
-            style={styles.background}
-          />
-          <View style={styles.avatarContainer}>
-            <Image
-              source={
-                avatar === ""
-                  ? require("../images/avatarDefault.png")
-                  : { uri: avatar }
-              }
-              style={styles.avatar}
-            />
-          </View>
-          {type == "admin" && (
-            <View
-              style={{
-                width: "100%",
-                justifyContent: "flex-end",
-                flexDirection: "row",
-                alignItems: "center",
-              }}
-            >
+    <View style={{ flex: 1, backgroundColor: "white" }}>
+      <View style={styles.header}>
+        <TouchableOpacity onPress={backAction} style={styles.backBtn}>
+          <MaterialIcons name="arrow-back" size={32} color="black" />
+        </TouchableOpacity>
+        <View
+          style={{
+            flex: 1,
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "center",
+            paddingHorizontal: 10,
+          }}
+        >
+          <Text style={[styles.text1, { fontSize: 18, paddingBottom: 3 }]}>
+            {nickName}
+          </Text>
+          {route.params.userType === "admin" && type === "user" && (
+            <TouchableOpacity activeOpacity={0.6} onPress={lockClick}>
               <MaterialIcons
-                name="admin-panel-settings"
+                name={isLock ? "lock-outline" : "lock-open"}
                 size={30}
                 color={colors.color4}
               />
-              <Text
-                style={[
-                  styles.text1,
-                  { color: colors.color4, fontSize: 18, padding: 3 },
-                ]}
-              >
-                Admin
-              </Text>
-            </View>
+            </TouchableOpacity>
           )}
         </View>
-        <View style={styles.infoContainer}>
-          <Text style={styles.text1}>{nickName}</Text>
-          <View style={styles.followContainer}>
-            <Text>
-              <Text style={styles.textBold}>{arrFollwer.length}</Text> người
-              theo dõi
-            </Text>
-            <View
-              style={{
-                width: 5,
-                height: 5,
-                marginHorizontal: 6,
-                borderRadius: 3,
-                backgroundColor: "black",
-              }}
-            />
-            <Text>
-              <Text style={styles.textBold}>{arrfollowing.length}</Text> đang
-              theo dõi
-            </Text>
-          </View>
-        </View>
-        <TouchableOpacity
-          style={styles.btnEditProfile}
-          onPress={() => followClick()}
-        >
-          <SimpleLineIcons name={iconFollow} size={27} color={colors.color4} />
-          <Text style={[styles.text2, { marginStart: 8 }]}>{textFollow}</Text>
-        </TouchableOpacity>
       </View>
-      <View style={styles.box2}>
-        <View style={styles.detailsContainer}>
-          <Text style={[styles.text1, { fontSize: 18, marginBottom: 5 }]}>
-            Chi Tiết
-          </Text>
-          {school.show && (
-            <LineInfo iconName="school" content={"Đã học tại " + school.name} />
-          )}
-          {work.show && (
-            <LineInfo iconName="work" content={"Làm việc tại " + work.name} />
-          )}
-          {address.show && (
-            <LineInfo iconName="place" content={"Đến từ " + address.name} />
-          )}
-          {relationship.show && (
-            <LineInfo iconName="favorite" content={relationship.name} />
-          )}
-          {!school.show &&
-            !work.show &&
-            !address.show &&
-            !relationship.show && (
-              <LineInfo
-                iconName="security"
-                content={nickName + " does not share any infomation"}
+      {!isLock && (
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          style={styles.container}
+        >
+          <View style={styles.box1}>
+            <View style={styles.images}>
+              <Image
+                source={background === "" ? "gray" : { uri: background }}
+                style={styles.background}
               />
-            )}
-        </View>
-      </View>
-      <View style={styles.box3}>
-        <Text
-          style={[
-            styles.text1,
-            { fontSize: 18, marginBottom: 5, paddingHorizontal: "4%" },
-          ]}
-        >
-          Danh sách bài viết
-        </Text>
-        {data.map((item, index) => (
-          <Posts
-            avatar={avatar}
-            userId={userId}
-            nickName={nickName}
-            post={item}
-            key={index}
-            showCommentScreen={showCommentScreen}
-          />
-        ))}
-      </View>
-    </ScrollView>
+              <View style={styles.avatarContainer}>
+                <Image
+                  source={
+                    avatar === ""
+                      ? require("../images/avatarDefault.png")
+                      : { uri: avatar }
+                  }
+                  style={styles.avatar}
+                />
+              </View>
+              {type == "admin" && (
+                <View
+                  style={{
+                    width: "100%",
+                    justifyContent: "flex-end",
+                    flexDirection: "row",
+                    alignItems: "center",
+                  }}
+                >
+                  <MaterialIcons
+                    name="admin-panel-settings"
+                    size={30}
+                    color={colors.color4}
+                  />
+                  <Text
+                    style={[
+                      styles.text1,
+                      { color: colors.color4, fontSize: 18, padding: 3 },
+                    ]}
+                  >
+                    Admin
+                  </Text>
+                </View>
+              )}
+            </View>
+            <View style={styles.infoContainer}>
+              <Text style={styles.text1}>{nickName}</Text>
+              <View style={styles.followContainer}>
+                <Text>
+                  <Text style={styles.textBold}>{arrFollwer.length}</Text> người
+                  theo dõi
+                </Text>
+                <View
+                  style={{
+                    width: 5,
+                    height: 5,
+                    marginHorizontal: 6,
+                    borderRadius: 3,
+                    backgroundColor: "black",
+                  }}
+                />
+                <Text>
+                  <Text style={styles.textBold}>{arrfollowing.length}</Text>{" "}
+                  đang theo dõi
+                </Text>
+              </View>
+            </View>
+            <TouchableOpacity
+              style={styles.btnEditProfile}
+              onPress={() => followClick()}
+            >
+              <SimpleLineIcons
+                name={iconFollow}
+                size={27}
+                color={colors.color4}
+              />
+              <Text style={[styles.text2, { marginStart: 8 }]}>
+                {textFollow}
+              </Text>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.box2}>
+            <View style={styles.detailsContainer}>
+              <Text style={[styles.text1, { fontSize: 18, marginBottom: 5 }]}>
+                Chi Tiết
+              </Text>
+              {school.show && (
+                <LineInfo
+                  iconName="school"
+                  content={"Đã học tại " + school.name}
+                />
+              )}
+              {work.show && (
+                <LineInfo
+                  iconName="work"
+                  content={"Làm việc tại " + work.name}
+                />
+              )}
+              {address.show && (
+                <LineInfo iconName="place" content={"Đến từ " + address.name} />
+              )}
+              {relationship.show && (
+                <LineInfo iconName="favorite" content={relationship.name} />
+              )}
+              {!school.show &&
+                !work.show &&
+                !address.show &&
+                !relationship.show && (
+                  <LineInfo
+                    iconName="security"
+                    content={nickName + " does not share any infomation"}
+                  />
+                )}
+            </View>
+          </View>
+          <View style={styles.box3}>
+            <Text
+              style={[
+                styles.text1,
+                { fontSize: 18, marginBottom: 5, paddingHorizontal: "4%" },
+              ]}
+            >
+              Danh sách bài viết
+            </Text>
+            {data.map((item, index) => (
+              <Posts
+                avatar={avatar}
+                userId={userId}
+                nickName={nickName}
+                post={item}
+                key={index}
+                showCommentScreen={showCommentScreen}
+              />
+            ))}
+          </View>
+        </ScrollView>
+      )}
+    </View>
   );
 };
 
@@ -345,5 +432,15 @@ const styles = StyleSheet.create({
   },
   box3: {
     marginTop: 10,
+  },
+  header: {
+    flexDirection: "row",
+    paddingHorizontal: 10,
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingVertical: 5,
+    borderBottomColor: colors.color6,
+    borderBottomWidth: 1.4,
+    paddingBottom: 10,
   },
 });
