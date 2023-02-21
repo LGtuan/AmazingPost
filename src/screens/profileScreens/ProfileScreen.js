@@ -5,16 +5,19 @@ import {
   TouchableOpacity,
   ScrollView,
   RefreshControl,
+  Alert,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+import Toast from "react-native-simple-toast";
 
 import styles from "./style";
 import colors from "../../colors/color";
 import Posts from "../../components/posts/Posts";
 import LineInfo from "../../components/LineInfo";
 import { getUserWithId, getUserWithPosts } from "../../api/UserApi";
-import { getAllPostWithUserId } from "../../api/PostApi";
+import { deletePostWithId, getAllPostWithUserId } from "../../api/PostApi";
+import { deleteCommentWithPostId } from "../../api/CommentApi";
 
 const info = {
   name: "",
@@ -47,7 +50,7 @@ const ProfileScreen = ({ stackNavigation, userId }) => {
       postId: postId,
       likes: likes,
       userId: userId,
-      type: type
+      type: type,
     });
   };
 
@@ -76,6 +79,27 @@ const ProfileScreen = ({ stackNavigation, userId }) => {
 
   const showEditProfileDetails = () => {
     stackNavigation.navigate("EditProfileDetails", { userId: userId });
+  };
+
+  const editPost = (post) => {
+    stackNavigation.navigate("UpdatePost",{userId: userId,post: post});
+  };
+
+  const removePost = (id) => {
+    Alert.alert("Do you want remove this post?", "", [
+      {
+        text: "OK",
+        onPress: () => {
+          deletePostWithId(id);
+          deleteCommentWithPostId(id);
+          Toast.show("Delete success", Toast.LONG);
+        },
+      },
+      {
+        text: "Cancel",
+        style: "cancel",
+      },
+    ]);
   };
 
   return (
@@ -205,14 +229,40 @@ const ProfileScreen = ({ stackNavigation, userId }) => {
         </Text>
         {posts.map((item, index) => {
           return (
-            <Posts
-              avatar={avatar}
-              post={item}
-              nickName={nickName}
-              userId={userId}
-              key={index}
-              showCommentScreen={showCommentScreen}
-            />
+            <View key={index}>
+              <Posts
+                avatar={avatar}
+                post={item}
+                nickName={nickName}
+                userId={userId}
+                showCommentScreen={showCommentScreen}
+              />
+              <View
+                style={{
+                  position: "absolute",
+                  flexDirection: "row",
+                  right: 5,
+                  top: 10,
+                }}
+              >
+                <MaterialIcons
+                  onPress={() => {
+                    editPost(item);
+                  }}
+                  name="edit"
+                  size={30}
+                  style={{ margin: 5 }}
+                />
+                <MaterialIcons
+                  onPress={() => {
+                    removePost(item.id);
+                  }}
+                  name="clear"
+                  size={30}
+                  style={{ margin: 5 }}
+                />
+              </View>
+            </View>
           );
         })}
       </View>

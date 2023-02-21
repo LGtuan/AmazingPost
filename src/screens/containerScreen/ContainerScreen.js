@@ -20,6 +20,7 @@ import ChangePasswordScreen from '../ChangePasswordScreen'
 import ForgotPasswordScreen from '../ForgotPasswordScreen'
 import CommentScreen from '../CommentScreen'
 import LikeScreen from '../LikeScreen'
+import UpdatePost from '../UpdatePost'
 
 const Stack = createNativeStackNavigator();
 
@@ -43,6 +44,7 @@ const FormScreen = () => {
                     <Stack.Screen name='ForgotPassword' options={{headerShown: false}} component={ForgotPasswordScreen}/>
                     <Stack.Screen name='Comment'  options={{headerShown: false}} component={CommentScreen}/>
                     <Stack.Screen name='Like' options={{headerShown: false}} component={LikeScreen} />
+                    <Stack.Screen name='UpdatePost' options={{headerShown: false}} component={UpdatePost}/>
                 </Stack.Navigator>
             </View>
         </NavigationContainer>

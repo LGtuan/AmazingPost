@@ -8,3 +8,12 @@ export function getAllBackground() {
       .then((json) => json)
       .catch((e) => console.log(e));
   }
+
+  export function getBackgroundWithId(id) {
+    return fetch(url + "/" + id, {
+      method: "GET",
+    })
+      .then((res) => res.json())
+      .then((json)=> json)
+      .catch((e) => console.log(e));
+  }

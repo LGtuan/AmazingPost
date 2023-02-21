@@ -22,3 +22,10 @@ export function getAllCommentWithPostId(postId) {
     .then((res) => res.json())
     .catch((e) => console.log(e));
 }
+
+export function deleteCommentWithPostId(postId){
+  return fetch(url + "?postId="+postId,{
+    method: "DELETE"
+  })
+  .catch(e => console.log(e));
+}

@@ -99,7 +99,7 @@ const MainScreen = ({ navigation, route }) => {
           )}
         </Tab.Screen>
         <Tab.Screen name="Entertaiment" component={EntertaimentScreen} />
-        <Tab.Screen name="Notification" component={NotificationScreen} />
+        {/* <Tab.Screen name="Notification" component={NotificationScreen} /> */}
         <Tab.Screen name="Profile">
             {(props)=> <ProfileScreen {...props} stackNavigation={navigation} userId={userId} />}
         </Tab.Screen>
